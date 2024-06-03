@@ -19,6 +19,28 @@ end
 function view:Init()
 	addon.window:SetTitle("Selection: Type", .1, .1, .1)
 	addon.window:SetBackAction(backAction)
+	addon.window1:SetTitle("Selection: Type", .1, .1, .1)
+	addon.window1:SetBackAction(backAction)
+end
+
+local UpdateLine = function(window,t,i,view,amount,id)
+
+	local line = window:GetLine(i-view.first)
+	local c = t.c
+		
+		line:SetValues(1, 1)
+		line:SetLeftText(" %s", t.name)
+		if amount ~= 0 then
+			line:SetRightText(amount)
+		else
+			line:SetRightText("")
+		end
+		line:SetColor(c[1], c[2], c[3])
+		line.typeid = id
+		line:SetDetailAction(detailAction)
+		line:Show()
+
+
 end
 
 function view:Update()
@@ -59,20 +81,12 @@ function view:Update()
 				amount = amount + u[t.id2].total
 			end
 		end
+
+		--local line = addon.window:GetLine(i-self.first)
+		--local line = addon.window:GetLine(i-self.first)
+		UpdateLine(addon.window,t,i,self,amount,id)
+		UpdateLine(addon.window1,t,i,self,amount,id)
+		--local line1 = addon.window1:GetLine(i-self.first)
 		
-		local line = addon.window:GetLine(i-self.first)
-		local c = t.c
-		
-		line:SetValues(1, 1)
-		line:SetLeftText(" %s", t.name)
-		if amount ~= 0 then
-			line:SetRightText(amount)
-		else
-			line:SetRightText("")
-		end
-		line:SetColor(c[1], c[2], c[3])
-		line.typeid = id
-		line:SetDetailAction(detailAction)
-		line:Show()
 	end
 end

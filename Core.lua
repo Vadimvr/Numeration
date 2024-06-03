@@ -147,9 +147,9 @@ function addon:ADDON_LOADED(event, addon)
 	
 	self:InitOptions()
 	icon:Register("Numeration", ldb, NumerationCharOptions.minimap)
-	self.window:OnInitialize()
+	self.windows:OnInitialize()
 	if NumerationCharOptions.forcehide then
-		self.window:Hide()
+		self.windows:Hide()
 	end
 	
 	if not NumerationCharDB then
@@ -214,7 +214,7 @@ end
 function ldb:OnClick(button)
 	if button == "LeftButton" then
 		if IsShiftKeyDown() then
-			addon.window:ShowResetWindow()
+			addon.windows:ShowResetWindow()
 		else
 			addon:ToggleVisibility()
 		end
@@ -224,9 +224,9 @@ end
 function addon:ToggleVisibility()
 	NumerationCharOptions.forcehide = not NumerationCharOptions.forcehide
 	if NumerationCharOptions.forcehide then
-		self.window:Hide()
+		self.windows:Hide()
 	else
-		self.window:Show()
+		self.windows:Show()
 		self:RefreshDisplay()
 	end
 end
@@ -276,7 +276,8 @@ updateTimer:SetScript("OnUpdate", function(self, elapsed)
 	self.timer = s.refreshinterval
 	
 	if current.changed then
-		ldb.text = addon.views["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
+		ldb.text = addon.views[0]["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
+		ldb.text = addon.views[1]["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
 	end
 	
 	local set = addon.nav.set and addon:GetSet(addon.nav.set) or current
@@ -294,13 +295,15 @@ function updateTimer:Refresh()
 end
 
 function addon:RefreshDisplay(update)
-	if self.window:IsShown() then
-		self.window:Clear()
+	print(self.nav.view,update)
+	if self.windows:IsShown() then
+		self.windows:Clear()
 		
 		if not update then
-			self.views[self.nav.view]:Init()
+			self.views[0][self.nav.view]:Init()
+			self.views[1][self.nav.view]:Init()
 			local segment = self.nav.set == "total" and "O" or self.nav.set == "current" and "C" or self.nav.set
-			self.window:UpdateSegment(segment)
+			self.windows:UpdateSegment(segment)
 		end
 		self.views[self.nav.view]:Update(NumerationCharOptions.petsmerged)
 	end
@@ -339,7 +342,7 @@ function addon:PrintLine(...)
 	SendChatMessage(format(...), useChatType, nil, useChannel)
 end
 
-function addon:Scroll(dir)
+function addon:Scroll(window,dir)
 	local view = self.views[self.nav.view]
 	if dir > 0 and view.first > 1 then
 		if IsShiftKeyDown() then
