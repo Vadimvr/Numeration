@@ -276,8 +276,8 @@ updateTimer:SetScript("OnUpdate", function(self, elapsed)
 	self.timer = s.refreshinterval
 	
 	if current.changed then
-		ldb.text = addon.views[0]["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
-		ldb.text = addon.views[1]["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
+		ldb.text = addon.views["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
+		ldb.text = addon.views["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
 	end
 	
 	local set = addon.nav.set and addon:GetSet(addon.nav.set) or current
@@ -295,13 +295,12 @@ function updateTimer:Refresh()
 end
 
 function addon:RefreshDisplay(update)
-	print(self.nav.view,update)
+	print("addon:RefreshDisplay" ,self.nav.view,update)
 	if self.windows:IsShown() then
 		self.windows:Clear()
 		
 		if not update then
-			self.views[0][self.nav.view]:Init()
-			self.views[1][self.nav.view]:Init()
+			self.views[self.nav.view]:Init()
 			local segment = self.nav.set == "total" and "O" or self.nav.set == "current" and "C" or self.nav.set
 			self.windows:UpdateSegment(segment)
 		end
