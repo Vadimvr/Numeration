@@ -12,7 +12,7 @@ end
 
 function view:Init(windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
-	if not set then backAction() return end
+	if not set then backAction(nil, windowID) return end
 	local target = addon.nav[windowID].target
 	
 	local t = addon.types[addon.nav[windowID].type]
@@ -47,7 +47,7 @@ end
 
 function view:Update(merged,windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
-	if not set then backAction() return end
+	if not set then backAction(nil, windowID) return end
 	local target = addon.nav[windowID].target
 	local etype = addon.types[addon.nav[windowID].type].id
 	

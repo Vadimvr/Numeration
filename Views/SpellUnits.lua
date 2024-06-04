@@ -13,7 +13,7 @@ end
 local spellName = addon.spellName
 function view:Init(windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
-	if not set then backAction() return end
+	if not set then backAction(nil, windowID) return end
 	local id = addon.nav[windowID].spell
 	
 	local t = addon.types[addon.nav[windowID].type]
@@ -48,7 +48,7 @@ end
 
 function view:Update(merged,windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
-	if not set then backAction() return end
+	if not set then backAction(nil, windowID) return end
 	local id = addon.nav[windowID].spell
 	local etype = addon.types[addon.nav[windowID].type].id
 	

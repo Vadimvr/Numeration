@@ -84,17 +84,17 @@ local updateTables = function(set, etype, etype2, merged)
 	return total
 end
 
-function view:Update(merged,j)
-	local set = addon:GetSet(addon.nav[j].set)
+function view:Update(merged,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then return end
-	local etype = addon.types[addon.nav[j].type].id
-	local etype2 = addon.types[addon.nav[j].type].id2
+	local etype = addon.types[addon.nav[windowID].type].id
+	local etype2 = addon.types[addon.nav[windowID].type].id2
 	
 	-- compile and sort information table
 	local total = updateTables(set, etype, etype2, merged)
 	
 	-- display
-	self.first, self.last = addon:GetArea(self.first, #sorttbl,j)
+	self.first, self.last = addon:GetArea(self.first, #sorttbl,windowID)
 	if not self.last then return end
 	
 	local maxvalue = nameToValue[sorttbl[1]]
@@ -103,7 +103,7 @@ function view:Update(merged,j)
 		local value, time = nameToValue[sorttbl[i]], nameToTime[sorttbl[i]]
 		local c = addon.color[u.class]
 		
-		local line = addon.windows[j]:GetLine(i-self.first)
+		local line = addon.windows[windowID]:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		if u.owner then
 			line:SetLeftText("%i. %s <%s>", i, u.name, u.owner)

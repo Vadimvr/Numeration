@@ -6,24 +6,31 @@ view.first = 1
 local spellName = addon.spellName
 local spellIcon = addon.spellIcon
 
-local backAction = function(f,windowID)
+local backAction = function(f, windowID)
 	view.first = 1
 	addon.nav[windowID].view = "Units"
 	addon.nav[windowID].unit = nil
-	addon:RefreshDisplay(nil,windowID)
+	addon:RefreshDisplay(nil, windowID)
 end
 
-local detailAction = function(f,windowID)
+local detailAction = function(f, windowID)
 	addon.nav[windowID].view = "UnitTargets"
-	addon:RefreshDisplay(nil,windowID)
+	addon:RefreshDisplay(nil, windowID)
 end
 
 function view:Init(windowID)
+
 	local set = addon:GetSet(addon.nav[windowID].set)
-	if not set then backAction() return end
+	if not set then
+		backAction(nil, windowID)
+		return
+	end
 	local u = set.unit[addon.nav[windowID].unit]
-	if not u then backAction() return end
-	
+	if not u then
+		backAction(nil, windowID)
+		return
+	end
+
 	local t = addon.types[addon.nav[windowID].type]
 	local text
 	if u.owner then
@@ -56,7 +63,7 @@ local updateTables = function(set, u, etype, merged)
 		end
 	end
 	if merged and u.pets then
-		for petname,v in pairs(u.pets) do
+		for petname, v in pairs(u.pets) do
 			local pu = set.unit[petname]
 			if pu[etype] then
 				total = total + pu[etype].total
@@ -74,27 +81,34 @@ local updateTables = function(set, u, etype, merged)
 	return total
 end
 
-function view:Update(merged,windowID)
+function view:Update(merged, windowID)
+
 	local set = addon:GetSet(addon.nav[windowID].set)
-	if not set then backAction() return end
+	if not set then
+		backAction(nil, windowID)
+		return
+	end
 	local u = set.unit[addon.nav[windowID].unit]
-	if not u then backAction() return end
+	if not u then
+		backAction(nil, windowID)
+		return
+	end
 	local etype = addon.types[addon.nav[windowID].type].id
 	local etype2 = addon.types[addon.nav[windowID].type].id2
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
 	total = total + updateTables(set, u, etype2, merged)
-	
+
 	local action = nil
 	if addon.nav[windowID].set ~= "total" then
 		action = detailAction
 		addon.windows[windowID]:SetDetailAction(action)
 	end
 	-- display
-	self.first, self.last = addon:GetArea(self.first, #sorttbl,windowID)
+	self.first, self.last = addon:GetArea(self.first, #sorttbl, windowID)
 	if not self.last then return end
-	
+
 	local c = addon.color[u.class]
 	local maxvalue = nameToValue[sorttbl[1]]
 	for i = self.first, self.last do
@@ -102,41 +116,39 @@ function view:Update(merged,windowID)
 		local value = nameToValue[sorttbl[i]]
 		local id = nameToId[sorttbl[i]]
 		local name, icon = spellName[id], spellIcon[id]
-		
+
 		if name == nil then
 			name = id
 			icon = ""
-		elseif id == 0 or id == 75 then
-			icon = ""
 		end
-		
-		local line = addon.windows[windowID]:GetLine(i-self.first)
+
+		local line = addon.windows[windowID]:GetLine(i - self.first)
 		line:SetValues(value, maxvalue)
 		if petName then
 			line:SetLeftText("%s <%s>", name, petName)
 		else
 			line:SetLeftText(name)
 		end
-		line:SetRightText("%i (%02.1f%%)", value, value/total*100)
+		line:SetRightText("%i (%02.1f%%)", value, value / total * 100)
 		line:SetColor(c[1], c[2], c[3])
 		line:SetIcon(icon)
 		line.spellId = id
 		line:SetDetailAction(action)
 		line:Show()
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	nameToValue = wipe(nameToValue)
 	nameToPetName = wipe(nameToPetName)
 	nameToId = wipe(nameToId)
 end
 
-function view:Report(merged, num_lines,windowID)
+function view:Report(merged, num_lines, windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
 	local u = set.unit[addon.nav[windowID].unit]
 	local etype = addon.types[addon.nav[windowID].type].id
 	local etype2 = addon.types[addon.nav[windowID].type].id2
-	
+
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
 	total = total + updateTables(set, u, etype2, merged)
@@ -144,21 +156,21 @@ function view:Report(merged, num_lines,windowID)
 	if #sorttbl < num_lines then
 		num_lines = #sorttbl
 	end
-	
+
 	-- display
-	addon:PrintHeaderLine(set,windowID)
+	addon:PrintHeaderLine(set, windowID)
 	for i = 1, num_lines do
 		local petName = nameToPetName[sorttbl[i]]
 		local value = nameToValue[sorttbl[i]]
 		local id = nameToId[sorttbl[i]]
 		local name = spellName[id] or id
-		
+
 		if petName then
 			name = format("%s <%s>", name, petName)
 		end
-		addon:PrintLine("%i. %s %i (%02.1f%%)", i, name, value, value/total*100)
+		addon:PrintLine("%i. %s %i (%02.1f%%)", i, name, value, value / total * 100)
 	end
-	
+
 	sorttbl = wipe(sorttbl)
 	nameToValue = wipe(nameToValue)
 	nameToPetName = wipe(nameToPetName)

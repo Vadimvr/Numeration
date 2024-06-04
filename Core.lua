@@ -115,7 +115,7 @@ do
 		addon.color.PET[3] * 255)
 end
 
-addon.spellIcon = setmetatable({ [0] = "", [75] = "", }, {
+addon.spellIcon = setmetatable({ [0] = "Interface\\Icons\\Inv_sword_04", [75] = "Interface\\Icons\\Ability_whirlwind", }, {
 	__index = function(tbl, i)
 		local spell, _, icon = GetSpellInfo(i)
 		addon.spellName[i] = spell
@@ -303,7 +303,6 @@ updateTimer:Hide()
 updateTimer:SetScript("OnUpdate", function(self, elapsed)
 	self.timer = self.timer - elapsed
 	if self.timer > 0 then
-		--	print("end")
 		return
 	end
 	self.timer = s.refreshinterval
@@ -331,10 +330,10 @@ function updateTimer:Refresh()
 end
 
 function addon:RefreshDisplay(update, windowID)
-	--	print(update, windowID)
+	
 	if self.windows[windowID]:IsShown() then
 		self.windows[windowID]:Clear()
-
+		
 		if not update then
 			self.views[self.nav[windowID].view]:Init(windowID)
 			local segment = self.nav[windowID].set == "total" and "O" or self.nav[windowID].set == "current" and "C" or

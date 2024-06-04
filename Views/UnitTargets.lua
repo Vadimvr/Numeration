@@ -11,9 +11,9 @@ end
 
 function view:Init(windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
-	if not set then backAction() return end
+	if not set then backAction(nil, windowID) return end
 	local u = set.unit[addon.nav[windowID].unit]
-	if not u then backAction() return end
+	if not u then backAction(nil, windowID) return end
 	
 	local t = addon.types[addon.nav[windowID].type]
 	local text
@@ -75,9 +75,9 @@ end
 
 function view:Update(merged,windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
-	if not set then backAction() return end
+	if not set then backAction(nil, windowID) return end
 	local u = set.unit[addon.nav[windowID].unit]
-	if not u then backAction() return end
+	if not u then backAction(nil, windowID) return end
 	local etype = addon.types[addon.nav[windowID].type].id
 	local etype2 = addon.types[addon.nav[windowID].type].id2
 	

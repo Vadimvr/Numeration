@@ -93,9 +93,9 @@ function view:Update(m,windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then return end
 	local dl = set.deathlog
-	if not dl then return backAction() end
+	if not dl then return backAction(nil, windowID) end
 	local dld = dl[addon.nav[windowID].id]
-	if not dld then return backAction() end
+	if not dld then return backAction(nil, windowID) end
 
 	-- display
 	self.first, self.last = addon:GetArea(self.first, #dld,windowID)
