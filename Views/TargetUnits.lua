@@ -3,22 +3,22 @@ local view = {}
 addon.views["TargetUnits"] = view
 view.first = 1
 
-local backAction = function(f)
+local backAction = function(f,windowID)
 	view.first = 1
-	addon.nav.view = "Targets"
-	addon.nav.target = nil
-	addon:RefreshDisplay()
+	addon.nav[windowID].view = "Targets"
+	addon.nav[windowID].target = nil
+	addon:RefreshDisplay(nil,windowID)
 end
 
-function view:Init()
-	local set = addon:GetSet(addon.nav.set)
+function view:Init(windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then backAction() return end
-	local target = addon.nav.target
+	local target = addon.nav[windowID].target
 	
-	local t = addon.types[addon.nav.type]
+	local t = addon.types[addon.nav[windowID].type]
 	local text = format("%s: %s", t.name, target)
-	addon.window:SetTitle(text, t.c[1], t.c[2], t.c[3])
-	addon.window:SetBackAction(backAction)
+	addon.windows[windowID]:SetTitle(text, t.c[1], t.c[2], t.c[3])
+	addon.windows[windowID]:SetBackAction(backAction)
 end
 
 local sorttbl = {}
@@ -45,17 +45,17 @@ local updateTables = function(set, target, etype, merged)
 	return total
 end
 
-function view:Update(merged)
-	local set = addon:GetSet(addon.nav.set)
+function view:Update(merged,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then backAction() return end
-	local target = addon.nav.target
-	local etype = addon.types[addon.nav.type].id
+	local target = addon.nav[windowID].target
+	local etype = addon.types[addon.nav[windowID].type].id
 	
 	-- compile and sort information table
 	local total = updateTables(set, target, etype, merged)
 	
 	-- display
-	self.first, self.last = addon:GetArea(self.first, #sorttbl)
+	self.first, self.last = addon:GetArea(self.first, #sorttbl,windowID)
 	if not self.last then return end
 	
 	local maxvalue = unitToValue[sorttbl[1]]
@@ -64,7 +64,7 @@ function view:Update(merged)
 		local value = unitToValue[u]
 		local c = addon.color[u.class]
 		
-		local line = addon.window:GetLine(i-self.first)
+		local line = addon.windows[windowID]:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		if u.owner then
 			line:SetLeftText("%i. %s <%s>", i, u.name, u.owner)
@@ -81,10 +81,10 @@ function view:Update(merged)
 	unitToValue = wipe(unitToValue)
 end
 
-function view:Report(merged, num_lines)
-	local set = addon:GetSet(addon.nav.set)
-	local target = addon.nav.target
-	local etype = addon.types[addon.nav.type].id
+function view:Report(merged, num_lines,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
+	local target = addon.nav[windowID].target
+	local etype = addon.types[addon.nav[windowID].type].id
 	
 	-- compile and sort information table
 	local total = updateTables(set, target, etype, merged)
@@ -94,7 +94,7 @@ function view:Report(merged, num_lines)
 	end
 	
 	-- display
-	addon:PrintHeaderLine(set)
+	addon:PrintHeaderLine(set,windowID)
 	for i = 1, num_lines do
 		local u = sorttbl[i]
 		local value = unitToValue[u]

@@ -1,45 +1,50 @@
 local addon = select(2, ...)
-print("window")
 
-local window = CreateFrame("Frame", "NumerationFrame1", UIParent)
-local window1 = CreateFrame("Frame", "NumerationFrame2", UIParent)
-addon.CreteWindow:CreteWindow(window,"window" );
-addon.CreteWindow:CreteWindow(window1,"window1");
-addon.window = window;
-addon.window1 = window1;
+local CountWindow = addon.CountWindow;
 
-addon.windows ={}
-function addon.windows:OnInitialize()
-	window:OnInitialize()
-	window1:OnInitialize()
+addon.windows = {}
+
+for i = 1, CountWindow, 1 do
+	local window = CreateFrame("Frame", "NumerationFrame" .. i, UIParent)
+	addon.CreteWindow:CreteWindow(window, "window", i);
+	addon.windows[i] = window;
 end
 
+function addon.windows:OnInitialize()
+	for i = 1, CountWindow, 1 do
+		addon.windows[i]:OnInitialize()
+	end
+end
 
 function addon.windows:Hide()
-	window:Hide()
-	window1:Hide()
+	for i = 1, CountWindow, 1 do
+		addon.windows[i]:Hide();
+	end
 end
 
-
 function addon.windows:Show()
-	window:Show()
-	window1:Show()
+	for i = 1, CountWindow, 1 do
+		addon.windows[i]:Show();
+	end
 end
 
 function addon.windows:ShowResetWindow()
-	window:ShowResetWindow(true)
-	window1:ShowResetWindow(false)
+	addon.windows[1]:ShowResetWindow(true)
+	for i = 2, CountWindow, 1 do
+		addon.windows[i]:ShowResetWindow(false);
+	end
 end
 
-function addon.windows:UpdateSegment(segment)
-	window:UpdateSegment(segment)
-	window1:UpdateSegment(segment)
+function addon.windows:UpdateSegment(segment,i)
+	addon.windows[i]:UpdateSegment(segment)
 end
 
-function addon.windows.IsShown ()
-	return window:IsShown()
+function addon.windows.IsShown()
+	return addon.windows[1]:IsShown()
 end
+
 function addon.windows:Clear()
-	window.Clear()
-	window1.Clear()
+	for i = 1, CountWindow, 1 do
+		addon.windows[i]:Clear();
+	end
 end

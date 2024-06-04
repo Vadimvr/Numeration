@@ -6,24 +6,24 @@ view.first = 1
 local spellName = addon.spellName
 local spellIcon = addon.spellIcon
 
-local backAction = function(f)
+local backAction = function(f,windowID)
 	view.first = 1
-	addon.nav.view = "Type"
-	addon.nav.type = nil
-	addon:RefreshDisplay()
+	addon.nav[windowID].view = "Type"
+	addon.nav[windowID].type = nil
+	addon:RefreshDisplay(nil,windowID)
 end
 
-local detailAction = function(f)
-	addon.nav.view = "SpellUnits"
-	addon.nav.spell = f.spell
-	addon:RefreshDisplay()
+local detailAction = function(f,windowID)
+	addon.nav[windowID].view = "SpellUnits"
+	addon.nav[windowID].spell = f.spell
+	addon:RefreshDisplay(nil,windowID)
 end
 
-function view:Init()
-	local v = addon.types[addon.nav.type]
+function view:Init(windowID)
+	local v = addon.types[addon.nav[windowID].type]
 	local c = v.c
-	addon.window:SetTitle(v.name, c[1], c[2], c[3])
-	addon.window:SetBackAction(backAction)
+	addon.windows[windowID]:SetTitle(v.name, c[1], c[2], c[3])
+	addon.windows[windowID]:SetBackAction(backAction)
 end
 
 local sorttbl = {}
@@ -51,19 +51,19 @@ local updateTables = function(set, etype)
 	return total
 end
 
-function view:Update(merged)
-	local set = addon:GetSet(addon.nav.set)
+function view:Update(merged,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then return end
-	local etype = addon.types[addon.nav.type].id
+	local etype = addon.types[addon.nav[windowID].type].id
 	
 	-- compile and sort information table
 	local total = updateTables(set, etype)
 	
 	-- display
-	self.first, self.last = addon:GetArea(self.first, #sorttbl)
+	self.first, self.last = addon:GetArea(self.first, #sorttbl,windowID)
 	if not self.last then return end
 	
-	local c = addon.types[addon.nav.type].c
+	local c = addon.types[addon.nav[windowID].type].c
 	local maxvalue = spellToValue[sorttbl[1]]
 	for i = self.first, self.last do
 		local id = sorttbl[i]
@@ -77,7 +77,7 @@ function view:Update(merged)
 			icon = ""
 		end
 		
-		local line = addon.window:GetLine(i-self.first)
+		local line = addon.windows[windowID]:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		line:SetLeftText("%i. %s", i, name)
 		line:SetRightText("%i (%02.1f%%)", value, value/total*100)
@@ -93,10 +93,10 @@ function view:Update(merged)
 	spellToValue = wipe(spellToValue)
 end
 
-function view:Report(merged, num_lines)
-	local set = addon:GetSet(addon.nav.set)
+function view:Report(merged, num_lines,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then return end
-	local etype = addon.types[addon.nav.type].id
+	local etype = addon.types[addon.nav[windowID].type].id
 	
 	-- compile and sort information table
 	local total = updateTables(set, etype)
@@ -106,7 +106,7 @@ function view:Report(merged, num_lines)
 	end
 	
 	-- display
-	addon:PrintHeaderLine(set)
+	addon:PrintHeaderLine(set,windowID)
 	for i = 1, num_lines do
 		local value = spellToValue[sorttbl[i]]
 		local name = spellName[sorttbl[i]] or sorttbl[i]

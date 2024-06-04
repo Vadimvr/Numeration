@@ -16,88 +16,88 @@ BINDING_NAME_NUMERATION_RESET = "Reset Data"
 
 local bossIds = {
 	-- Naxxramas
-	[15956] = true, -- Anub'Rekhan
-	[15953] = true, -- Grand Widow Faerlina
-	[15952] = true, -- Maexxna
-	[15954] = true, -- Noth the Plaguebringer
-	[15936] = true, -- Heigan the Unclean
-	[16011] = true, -- Loatheb
-	[16061] = true, -- Instructor Razuvious
-	[16060] = true, -- Gothik the Harvester
-	[16064] = "The Four Horsemen", -- Thane Korth'azz
-	[16065] = "The Four Horsemen", -- Lady Blaumeux
-	[30549] = "The Four Horsemen", -- Baron Rivendare
-	[16063] = "The Four Horsemen", -- Sir Zeliek
-	[16028] = true, -- Patchwerk
-	[15931] = true, -- Grobbulus
-	[15932] = true, -- Gluth
-	[15928] = true, -- Thaddius
-	[15989] = true, -- Sapphiron
-	[15990] = true, -- Kel'Thuzad
+	[15956] = true,                 -- Anub'Rekhan
+	[15953] = true,                 -- Grand Widow Faerlina
+	[15952] = true,                 -- Maexxna
+	[15954] = true,                 -- Noth the Plaguebringer
+	[15936] = true,                 -- Heigan the Unclean
+	[16011] = true,                 -- Loatheb
+	[16061] = true,                 -- Instructor Razuvious
+	[16060] = true,                 -- Gothik the Harvester
+	[16064] = "The Four Horsemen",  -- Thane Korth'azz
+	[16065] = "The Four Horsemen",  -- Lady Blaumeux
+	[30549] = "The Four Horsemen",  -- Baron Rivendare
+	[16063] = "The Four Horsemen",  -- Sir Zeliek
+	[16028] = true,                 -- Patchwerk
+	[15931] = true,                 -- Grobbulus
+	[15932] = true,                 -- Gluth
+	[15928] = true,                 -- Thaddius
+	[15989] = true,                 -- Sapphiron
+	[15990] = true,                 -- Kel'Thuzad
 	-- The Eye of Eternity
-	[28859] = true, -- Malygos
+	[28859] = true,                 -- Malygos
 	-- The Obsidian Sanctum
-	[28860] = true, -- Sartharion
+	[28860] = true,                 -- Sartharion
 	-- Vault of Archavon
-	[31125] = true, -- Archavon the Stone Watcher
-	[33993] = true, -- Emalon the Storm Watcher
-	[35013] = true, -- Koralon the Flame Watcher
-	[38433] = true, -- Toravon the Ice Watcher
+	[31125] = true,                 -- Archavon the Stone Watcher
+	[33993] = true,                 -- Emalon the Storm Watcher
+	[35013] = true,                 -- Koralon the Flame Watcher
+	[38433] = true,                 -- Toravon the Ice Watcher
 	-- Ulduar
-	[33113] = true, -- Flame Leviathan
-	[33118] = true, -- Ignis the Furnace Master
-	[33186] = true, -- Razorscale
-	[33293] = true, -- XT-002 Deconstructor
-	[32867] = "Assembly of Iron", -- Steelbreaker
-	[32927] = "Assembly of Iron", -- Runemaster Molgeim
-	[32857] = "Assembly of Iron", -- Stormcaller Brundir
-	[32930] = true, -- Kologarn
-	[33515] = true, -- Auriaya
-	[32906] = true, -- Freya
-	[32845] = true, -- Hodir
-	[33432] = "Mimiron", -- Leviathan Mk II
-	[33651] = "Mimiron", -- VX-001
-	[33670] = "Mimiron", -- Aerial Command Unit
-	[32865] = true, -- Thorim
-	[33271] = true, -- General Vezax
-	[33136] = "Yogg-Saron", -- Guardian of Yogg-Saron
-	[33288] = true, -- Yogg-Saron
-	[32871] = true, -- Algalon the Observer
+	[33113] = true,                 -- Flame Leviathan
+	[33118] = true,                 -- Ignis the Furnace Master
+	[33186] = true,                 -- Razorscale
+	[33293] = true,                 -- XT-002 Deconstructor
+	[32867] = "Assembly of Iron",   -- Steelbreaker
+	[32927] = "Assembly of Iron",   -- Runemaster Molgeim
+	[32857] = "Assembly of Iron",   -- Stormcaller Brundir
+	[32930] = true,                 -- Kologarn
+	[33515] = true,                 -- Auriaya
+	[32906] = true,                 -- Freya
+	[32845] = true,                 -- Hodir
+	[33432] = "Mimiron",            -- Leviathan Mk II
+	[33651] = "Mimiron",            -- VX-001
+	[33670] = "Mimiron",            -- Aerial Command Unit
+	[32865] = true,                 -- Thorim
+	[33271] = true,                 -- General Vezax
+	[33136] = "Yogg-Saron",         -- Guardian of Yogg-Saron
+	[33288] = true,                 -- Yogg-Saron
+	[32871] = true,                 -- Algalon the Observer
 	-- Trial of the Crusader
-	[34796] = "Northrend Beasts", -- Gormok the Impaler
-	[35144] = "Northrend Beasts", -- Acidmaw
-	[34799] = "Northrend Beasts", -- Dreadscale
-	[34797] = "Northrend Beasts", -- Icehowl
-	[34780] = true, -- Lord Jaraxxus
-	[34469] = "Faction Champions", -- Melador Valestrider <Druid>
-	[34459] = "Faction Champions", -- Erin Misthoof <Druid>
-	[34465] = "Faction Champions", -- Velanaa <Paladin>
-	[34445] = "Faction Champions", -- Liandra Suncaller <Paladin>
-	[34466] = "Faction Champions", -- Anthar Forgemender <Priest>
-	[34447] = "Faction Champions", -- Caiphus the Stern <Priest>
-	[34470] = "Faction Champions", -- Saamul <Shaman>
-	[34444] = "Faction Champions", -- Thrakgar <Shaman>
-	[34497] = "Twin Val'kyr", -- Fjola Lightbane
-	[34496] = "Twin Val'kyr", -- Eydis Darkbane
-	[34564] = true, -- Anub'arak
+	[34796] = "Northrend Beasts",   -- Gormok the Impaler
+	[35144] = "Northrend Beasts",   -- Acidmaw
+	[34799] = "Northrend Beasts",   -- Dreadscale
+	[34797] = "Northrend Beasts",   -- Icehowl
+	[34780] = true,                 -- Lord Jaraxxus
+	[34469] = "Faction Champions",  -- Melador Valestrider <Druid>
+	[34459] = "Faction Champions",  -- Erin Misthoof <Druid>
+	[34465] = "Faction Champions",  -- Velanaa <Paladin>
+	[34445] = "Faction Champions",  -- Liandra Suncaller <Paladin>
+	[34466] = "Faction Champions",  -- Anthar Forgemender <Priest>
+	[34447] = "Faction Champions",  -- Caiphus the Stern <Priest>
+	[34470] = "Faction Champions",  -- Saamul <Shaman>
+	[34444] = "Faction Champions",  -- Thrakgar <Shaman>
+	[34497] = "Twin Val'kyr",       -- Fjola Lightbane
+	[34496] = "Twin Val'kyr",       -- Eydis Darkbane
+	[34564] = true,                 -- Anub'arak
 	-- Onyxia's Lair
-	[10184] = true, -- Onyxia
+	[10184] = true,                 -- Onyxia
 	-- Icecrown Citadel
-	[36612] = true, -- Lord Marrowgar
-	[36855] = true, -- Lady Deathwhisper
-	[37813] = true, -- Deathbringer Saurfang
-	[36626] = true, -- Festergut
-	[36627] = true, -- Rotface
-	[36678] = true, -- Professor Putricide
+	[36612] = true,                 -- Lord Marrowgar
+	[36855] = true,                 -- Lady Deathwhisper
+	[37813] = true,                 -- Deathbringer Saurfang
+	[36626] = true,                 -- Festergut
+	[36627] = true,                 -- Rotface
+	[36678] = true,                 -- Professor Putricide
 	[37972] = "Blood Prince Council", -- Prince Keleseth
 	[37973] = "Blood Prince Council", -- Prince Taldaram
 	[37970] = "Blood Prince Council", -- Prince Valanar
-	[37955] = true, -- Blood-Queen Lana'thel
+	[37955] = true,                 -- Blood-Queen Lana'thel
 	[37868] = "Valithria Dreamwalker", -- Risen Archmage
-	[36853] = true, -- Sindragosa
-	[36597] = true, -- The Lich King
+	[36853] = true,                 -- Sindragosa
+	[36597] = true,                 -- The Lich King
 	-- Ruby Sanctum
-	[39863] = true, -- Halion
+	[39863] = true,                 -- Halion
 }
 
 -- used colors
@@ -111,21 +111,26 @@ do
 		addon.color[class] = { c.r, c.g, c.b }
 		addon.colorhex[class] = string.format("%02X%02X%02X", c.r * 255, c.g * 255, c.b * 255)
 	end
-	addon.colorhex["PET"] = string.format("%02X%02X%02X", addon.color.PET[1] * 255, addon.color.PET[2] * 255, addon.color.PET[3] * 255)
+	addon.colorhex["PET"] = string.format("%02X%02X%02X", addon.color.PET[1] * 255, addon.color.PET[2] * 255,
+		addon.color.PET[3] * 255)
 end
 
-addon.spellIcon = setmetatable({ [0] = "", [75] = "", }, { __index = function(tbl, i)
-	local spell, _, icon = GetSpellInfo(i)
-	addon.spellName[i] = spell
-	tbl[i] = icon
-	return icon
-end})
-addon.spellName = setmetatable({ [0] = "Melee", }, {__index = function(tbl, i)
-	local spell, _, icon = GetSpellInfo(i)
-	addon.spellIcon[i] = icon
-	tbl[i] = spell
-	return spell
-end})
+addon.spellIcon = setmetatable({ [0] = "", [75] = "", }, {
+	__index = function(tbl, i)
+		local spell, _, icon = GetSpellInfo(i)
+		addon.spellName[i] = spell
+		tbl[i] = icon
+		return icon
+	end
+})
+addon.spellName = setmetatable({ [0] = "Melee", }, {
+	__index = function(tbl, i)
+		local spell, _, icon = GetSpellInfo(i)
+		addon.spellIcon[i] = icon
+		tbl[i] = spell
+		return spell
+	end
+})
 local newSet = function()
 	return {
 		unit = {},
@@ -144,22 +149,22 @@ addon.events:RegisterEvent("ADDON_LOADED")
 function addon:ADDON_LOADED(event, addon)
 	if addon ~= addonname then return end
 	self.events:UnregisterEvent("ADDON_LOADED")
-	
+
 	self:InitOptions()
 	icon:Register("Numeration", ldb, NumerationCharOptions.minimap)
 	self.windows:OnInitialize()
 	if NumerationCharOptions.forcehide then
 		self.windows:Hide()
 	end
-	
+
 	if not NumerationCharDB then
 		self:Reset()
 	end
 	current = self:GetSet(1) or newSet()
-	
+
 	self.collect:RemoveUnneededEvents()
 	self.events:RegisterEvent("ZONE_CHANGED_NEW_AREA")
-	
+
 	if GetRealZoneText() ~= "" then
 		self:ZONE_CHANGED_NEW_AREA(event)
 	end
@@ -177,7 +182,7 @@ function addon:InitOptions()
 			end
 		end
 	end
-	
+
 	if not NumerationCharOptions then
 		NumerationCharOptions = {}
 	end
@@ -197,18 +202,40 @@ function addon:InitOptions()
 	end
 	if not NumerationCharOptions.nav then
 		NumerationCharOptions.nav = {
+			[1] = {
+
+				view = "Units",
+				set = "current",
+				type = 1,
+			},
+			[2] = {
+
+				view = "Units",
+				set = "current",
+				type = 1,
+			}
+		}
+	end
+	self.nav = {
+		[1] = {
+
+			view = "Units",
+			set = "current",
+			type = 1,
+		},
+		[2] = {
+
 			view = "Units",
 			set = "current",
 			type = 1,
 		}
-	end
-	self.nav = NumerationCharOptions.nav
+	};
 end
 
 function ldb:OnTooltipShow()
-    GameTooltip:AddLine("Numeration", 1, .8, 0)
-    GameTooltip:AddLine("Left-Click to toggle window visibility.")
-    GameTooltip:AddLine("Shift + Left-Click to reset data.")
+	GameTooltip:AddLine("Numeration", 1, .8, 0)
+	GameTooltip:AddLine("Left-Click to toggle window visibility.")
+	GameTooltip:AddLine("Shift + Left-Click to reset data.")
 end
 
 function ldb:OnClick(button)
@@ -227,7 +254,9 @@ function addon:ToggleVisibility()
 		self.windows:Hide()
 	else
 		self.windows:Show()
-		self:RefreshDisplay()
+		for i = 1, addon.CountWindow, 1 do
+			self:RefreshDisplay(nil,i)
+		end
 	end
 end
 
@@ -264,7 +293,9 @@ function addon:Reset()
 	if self.nav.set and self.nav.set ~= "total" and self.nav.set ~= "current" then
 		self.nav.set = "current"
 	end
-	self:RefreshDisplay()
+	for i = 1, addon.CountWindow, 1 do
+		self:RefreshDisplay(nil,i)
+	end
 	collectgarbage("collect")
 end
 
@@ -274,47 +305,47 @@ updateTimer:SetScript("OnUpdate", function(self, elapsed)
 	self.timer = self.timer - elapsed
 	if self.timer > 0 then return end
 	self.timer = s.refreshinterval
-	
+
 	if current.changed then
 		ldb.text = addon.views["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
-		ldb.text = addon.views["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
 	end
-	
+
 	local set = addon.nav.set and addon:GetSet(addon.nav.set) or current
 	if not set or not set.changed then return end
 	set.changed = nil
-	
-	addon:RefreshDisplay(true)
+
+	addon:RefreshDisplay(true,-1)
 end)
 function updateTimer:Activate()
 	self.timer = s.refreshinterval
 	self:Show()
 end
+
 function updateTimer:Refresh()
 	self.timer = s.refreshinterval
 end
 
-function addon:RefreshDisplay(update)
-	print("addon:RefreshDisplay" ,self.nav.view,update)
-	if self.windows:IsShown() then
-		self.windows:Clear()
-		
+function addon:RefreshDisplay(update,i)
+	if self.windows[i]:IsShown() then
+		self.windows[i]:Clear()
+
 		if not update then
-			self.views[self.nav.view]:Init()
-			local segment = self.nav.set == "total" and "O" or self.nav.set == "current" and "C" or self.nav.set
-			self.windows:UpdateSegment(segment)
+
+			self.views[self.nav[i].view]:Init(i)
+			local segment = self.nav[i].set == "total" and "O" or self.nav[i].set == "current" and "C" or self.nav[i].set
+			self.windows:UpdateSegment(segment,i)
 		end
-		self.views[self.nav.view]:Update(NumerationCharOptions.petsmerged)
+		self.views[self.nav[i].view]:Update(NumerationCharOptions.petsmerged,i)
 	end
 	if not update then
 		ldb.text = self.views["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
 	end
-	
+
 	updateTimer:Refresh()
 end
 
 local useChatType, useChannel
-function addon:Report(lines, chatType, channel)
+function addon:Report(lines, chatType, channel,windowID)
 	useChatType, useChannel = chatType, channel
 	if channel == "target" then
 		useChannel = UnitName("target")
@@ -323,26 +354,26 @@ function addon:Report(lines, chatType, channel)
 			return
 		end
 	end
-	local view = self.views[self.nav.view]
+	local view = self.views[self.nav[windowID].view]
 	if view.Report then
-		view:Report(NumerationCharOptions.petsmerged, lines)
+		view:Report(NumerationCharOptions.petsmerged, lines,windowID)
 	else
-		print("Report is not supported by '", self.nav.view, "'-view")
+		print("Report is not supported by '", self.nav[windowID].view, "'-view")
 	end
 end
 
-function addon:PrintHeaderLine(set)
-	
+function addon:PrintHeaderLine(set,windowID)
 	local datetext, timetext = self:GetDuration(set)
-	self:PrintLine("# %s for %s%s", self.window:GetTitle(), set.name, datetext and format(" [%s %s]", datetext, timetext) or "")
+	self:PrintLine("# %s for %s%s", self.windows[windowID]:GetTitle(), set.name,
+		datetext and format(" [%s %s]", datetext, timetext) or "")
 end
 
 function addon:PrintLine(...)
 	SendChatMessage(format(...), useChatType, nil, useChannel)
 end
 
-function addon:Scroll(window,dir)
-	local view = self.views[self.nav.view]
+function addon:Scroll(windowID, dir)
+	local view = self.views[self.nav[windowID].view]
 	if dir > 0 and view.first > 1 then
 		if IsShiftKeyDown() then
 			view.first = 1
@@ -356,28 +387,28 @@ function addon:Scroll(window,dir)
 			view.first = view.first + 1
 		end
 	end
-	self:RefreshDisplay(true)
+	self:RefreshDisplay(true,windowID)
 end
 
-function addon:GetArea(start, total)
+function addon:GetArea(start, total,i)
 	if total == 0 then return start end
-	
+
 	local first = start
-	local last = start+self.window.maxlines-1
+	local last = start + self.windows[i].maxlines - 1
 	if last > total then
-		first = first-last+total
+		first = first - last + total
 		last = total
 	end
 	if first < 1 then
 		first = 1
 	end
-	self.window:SetScrollPosition(first, total)
+	self.windows[i]:SetScrollPosition(first, total)
 	return first, last
 end
 
 function addon:GetSet(id)
 	if not id then return end
-	
+
 	if id == "current" then
 		return current
 	elseif id == "total" then
@@ -392,14 +423,15 @@ end
 
 function addon:GetDuration(set)
 	if not set.start or not set.now then return end
-	local duration = math.ceil(set.now-set.start)
-	local durationtext = duration < 60 and format("%is", duration%60) or format("%im%is", math.floor(duration/60), duration%60)
+	local duration = math.ceil(set.now - set.start)
+	local durationtext = duration < 60 and format("%is", duration % 60) or
+	format("%im%is", math.floor(duration / 60), duration % 60)
 	return date("%H:%M", set.start), durationtext
 end
 
 function addon:GetUnitClass(playerID)
 	if not playerID then return end
-	
+
 	local class = self.guidToClass[playerID]
 	if self.guidToName[class] then
 		return "PET"
@@ -413,7 +445,7 @@ function addon:GetUnit(set, playerID, playerName)
 	if not playerName then
 		playerName = self.guidToName[playerID]
 	end
-	
+
 	if not ownerName then
 		-- unit
 		local u = set.unit[playerName]
@@ -450,15 +482,15 @@ end
 local summonguids = {}
 do
 	local UnitGUID, UnitName, UnitClass
-		= UnitGUID, UnitName, UnitClass
-	local addPlayerPet = function(unit, pet)
+	                                    = UnitGUID, UnitName, UnitClass
+	local addPlayerPet                  = function(unit, pet)
 		local unitID = UnitGUID(unit)
 		if not unitID then return end
-		
+
 		local unitName, unitRealm = UnitName(unit)
 		local _, unitClass = UnitClass(unit)
 		local petID = UnitGUID(pet)
-		
+
 		addon.guidToClass[unitID] = unitClass
 		addon.guidToName[unitID] = unitRealm and format("%s-%s", unitName, unitRealm) or unitName
 		if petID then
@@ -471,22 +503,22 @@ do
 		for pid, uid in pairs(summonguids) do
 			self.guidToClass[pid] = uid
 		end
-		
+
 		local num = GetNumRaidMembers()
 		if num > 0 then
 			for i = 1, num do
-				addPlayerPet("raid"..i, "raid"..i.."pet")
+				addPlayerPet("raid" .. i, "raid" .. i .. "pet")
 			end
 		else
 			addPlayerPet("player", "pet")
 			local num = GetNumPartyMembers()
 			if num > 0 then
 				for i = 1, num do
-					addPlayerPet("party"..i, "party"..i.."pet")
+					addPlayerPet("party" .. i, "party" .. i .. "pet")
 				end
 			end
 		end
-		
+
 		-- remove summons from guid list, if owner is gone
 		for pid, uid in pairs(summonguids) do
 			if not self.guidToClass[uid] then
@@ -506,48 +538,52 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 
 	if force == true or zoneType ~= self.zoneType then
 		self.zoneType = zoneType
-		
+
 		if not NumerationCharOptions.onlyinstance or zoneType == "party" or zoneType == "raid" then
 			local curZone = GetRealZoneText()
 			if curZone ~= NumerationCharDB.zone then
 				NumerationCharDB.zone = curZone
-			--	addon.window:ShowResetWindow()
+				--	addon.window:ShowResetWindow()
 			end
 			self:UpdateGUIDS()
-			
+
 			self.events:RegisterEvent("PLAYER_ENTERING_WORLD")
 			self.events:RegisterEvent("PARTY_MEMBERS_CHANGED")
 			self.events:RegisterEvent("RAID_ROSTER_UPDATE")
 			self.events:RegisterEvent("UNIT_PET")
-			
+
 			self.events:RegisterEvent("PLAYER_REGEN_DISABLED")
 			self.events:RegisterEvent("PLAYER_REGEN_ENABLED")
-			
+
 			self.events:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-			
+
 			updateTimer:Activate()
 			if not NumerationCharOptions.forcehide then
-				self:RefreshDisplay()
-				self.window:Show()
+				for i = 1, addon.CountWindow, 1 do
+					self:RefreshDisplay(nil,i)
+				end
+				self.windows:Show()
 			end
 		else
 			self.events:UnregisterEvent("PLAYER_ENTERING_WORLD")
 			self.events:UnregisterEvent("PARTY_MEMBERS_CHANGED")
 			self.events:UnregisterEvent("RAID_ROSTER_UPDATE")
 			self.events:UnregisterEvent("UNIT_PET")
-			
+
 			self.events:UnregisterEvent("PLAYER_REGEN_DISABLED")
 			self.events:UnregisterEvent("PLAYER_REGEN_ENABLED")
-			
+
 			self.events:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 			updateTimer:Hide()
 			if zoneType == "none" then
 				if not NumerationCharOptions.forcehide then
-					self:RefreshDisplay()
-					self.window:Show()
+					for i = 1, addon.CountWindow, 1 do
+						self:RefreshDisplay(nil,i)
+					end
+					self.windows:Show()
 				end
 			else
-				self.window:Hide()
+				self.windows:Hide()
 			end
 		end
 	end
@@ -566,10 +602,12 @@ function combatTimer:Activate()
 	self.timer = s.combatseconds
 	self:Show()
 end
+
 function addon:PLAYER_REGEN_DISABLED()
 	inCombat = true
 	combatTimer:Hide()
 end
+
 function addon:PLAYER_REGEN_ENABLED()
 	inCombat = nil
 	combatTimer:Activate()
@@ -581,7 +619,7 @@ function addon:EnterCombatEvent(timestamp, guid, name)
 		current.start = timestamp
 		current.active = true
 	end
-	
+
 	current.now = timestamp
 	if not current.boss then
 		local mobid = bossIds[tonumber(guid:sub(9, 12), 16)]
@@ -607,13 +645,14 @@ function addon:LeaveCombatEvent()
 		if type(self.nav.set) == "number" then
 			self.nav.set = self.nav.set + 1
 		end
-		
+
 		-- Refresh View
 		self:RefreshDisplay(true)
 	end
 end
 
-function addon:COMBAT_LOG_EVENT_UNFILTERED(e, timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
+function addon:COMBAT_LOG_EVENT_UNFILTERED(e, timestamp, eventtype, srcGUID, srcName, srcFlags, dstGUID, dstName,
+										   dstFlags, ...)
 	if self.collect[eventtype] then
 		self.collect[eventtype](timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
 	end

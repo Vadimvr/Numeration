@@ -6,33 +6,33 @@ view.first = 1
 local spellName = addon.spellName
 local spellIcon = addon.spellIcon
 
-local backAction = function(f)
+local backAction = function(f,windowID)
 	view.first = 1
-	addon.nav.view = "Units"
-	addon.nav.unit = nil
-	addon:RefreshDisplay()
+	addon.nav[windowID].view = "Units"
+	addon.nav[windowID].unit = nil
+	addon:RefreshDisplay(nil,windowID)
 end
 
-local detailAction = function(f)
-	addon.nav.view = "UnitTargets"
-	addon:RefreshDisplay()
+local detailAction = function(f,windowID)
+	addon.nav[windowID].view = "UnitTargets"
+	addon:RefreshDisplay(nil,windowID)
 end
 
-function view:Init()
-	local set = addon:GetSet(addon.nav.set)
+function view:Init(windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then backAction() return end
-	local u = set.unit[addon.nav.unit]
+	local u = set.unit[addon.nav[windowID].unit]
 	if not u then backAction() return end
 	
-	local t = addon.types[addon.nav.type]
+	local t = addon.types[addon.nav[windowID].type]
 	local text
 	if u.owner then
 		text = format("%s: %s <%s>", t.name, u.name, u.owner)
 	else
 		text = format("%s: %s", t.name, u.name)
 	end
-	addon.window:SetTitle(text, t.c[1], t.c[2], t.c[3])
-	addon.window:SetBackAction(backAction)
+	addon.windows[windowID]:SetTitle(text, t.c[1], t.c[2], t.c[3])
+	addon.windows[windowID]:SetBackAction(backAction)
 end
 
 local sorttbl = {}
@@ -74,25 +74,25 @@ local updateTables = function(set, u, etype, merged)
 	return total
 end
 
-function view:Update(merged)
-	local set = addon:GetSet(addon.nav.set)
+function view:Update(merged,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then backAction() return end
-	local u = set.unit[addon.nav.unit]
+	local u = set.unit[addon.nav[windowID].unit]
 	if not u then backAction() return end
-	local etype = addon.types[addon.nav.type].id
-	local etype2 = addon.types[addon.nav.type].id2
+	local etype = addon.types[addon.nav[windowID].type].id
+	local etype2 = addon.types[addon.nav[windowID].type].id2
 	
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
 	total = total + updateTables(set, u, etype2, merged)
 	
 	local action = nil
-	if addon.nav.set ~= "total" then
+	if addon.nav[windowID].set ~= "total" then
 		action = detailAction
-		addon.window:SetDetailAction(action)
+		addon.windows[windowID]:SetDetailAction(action)
 	end
 	-- display
-	self.first, self.last = addon:GetArea(self.first, #sorttbl)
+	self.first, self.last = addon:GetArea(self.first, #sorttbl,windowID)
 	if not self.last then return end
 	
 	local c = addon.color[u.class]
@@ -110,7 +110,7 @@ function view:Update(merged)
 			icon = ""
 		end
 		
-		local line = addon.window:GetLine(i-self.first)
+		local line = addon.windows[windowID]:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		if petName then
 			line:SetLeftText("%s <%s>", name, petName)
@@ -131,11 +131,11 @@ function view:Update(merged)
 	nameToId = wipe(nameToId)
 end
 
-function view:Report(merged, num_lines)
-	local set = addon:GetSet(addon.nav.set)
-	local u = set.unit[addon.nav.unit]
-	local etype = addon.types[addon.nav.type].id
-	local etype2 = addon.types[addon.nav.type].id2
+function view:Report(merged, num_lines,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
+	local u = set.unit[addon.nav[windowID].unit]
+	local etype = addon.types[addon.nav[windowID].type].id
+	local etype2 = addon.types[addon.nav[windowID].type].id2
 	
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
@@ -146,7 +146,7 @@ function view:Report(merged, num_lines)
 	end
 	
 	-- display
-	addon:PrintHeaderLine(set)
+	addon:PrintHeaderLine(set,windowID)
 	for i = 1, num_lines do
 		local petName = nameToPetName[sorttbl[i]]
 		local value = nameToValue[sorttbl[i]]

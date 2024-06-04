@@ -7,24 +7,24 @@ local spellIcon = addon.spellIcon
 local spellName = addon.spellName
 local colorhex = addon.colorhex
 
-local backAction = function(f)
+local backAction = function(f, windowID)
 	view.first = 1
-	addon.nav.view = "Type"
-	addon.nav.type = nil
-	addon:RefreshDisplay()
+	addon.nav[windowID].view = "Type"
+	addon.nav[windowID].type = nil
+	addon:RefreshDisplay(nil, windowID)
 end
 
-local detailAction = function(f)
-	addon.nav.view = "Deathlog-Detail"
-	addon.nav.id = f.id
-	addon:RefreshDisplay()
+local detailAction = function(f, windowID)
+	addon.nav[windowID].view = "Deathlog-Detail"
+	addon.nav[windowID].id = f.id
+	addon:RefreshDisplay(nil, windowID)
 end
 
-function view:Init()
-	local v = addon.types[addon.nav.type]
+function view:Init(windowID)
+	local v = addon.types[addon.nav[windowID].type]
 	local c = v.c
-	addon.window:SetTitle(v.name, c[1], c[2], c[3])
-	addon.window:SetBackAction(backAction)
+	addon.windows[windowID]:SetTitle(v.name, c[1], c[2], c[3])
+	addon.windows[windowID]:SetBackAction(backAction)
 end
 
 local schoolColor = {
@@ -67,20 +67,20 @@ eventInfo.REZZ = function(event, playerName, class, spellId, rezzerName)
 		spellName[spellId])
 	return icon, text, spellId
 end
-function view:Update()
-	local set = addon:GetSet(addon.nav.set)
+function view:Update(m, windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then return end
 	local dl = set.deathlog
 	if not dl then return end
 
 	-- display
-	self.first, self.last = addon:GetArea(self.first, #dl)
+	self.first, self.last = addon:GetArea(self.first, #dl, windowID)
 	if not self.last then return end
 
 	local total = set.start and set.now and (set.now - set.start) or 1
 	for i = self.first, self.last do
 		local entry = dl[i]
-		local line = addon.window:GetLine(i - self.first)
+		local line = addon.windows[windowID]:GetLine(i - self.first)
 
 		local playerName, class, event, info = strsplit("#", entry[0])
 		local icon, text, spellId = eventInfo[event](event, playerName, class, strsplit(":", info))
@@ -114,24 +114,24 @@ eventInfoChat.DEATH = function(event, playerName, class, spellId, srcName, spell
 	if spellId == "" then
 		spellId = nil
 		icon = [[Interface\TargetingFrame\UI-TargetingFrame-Skull]]
-		text = string.format("%s",  playerName)
+		text = string.format("%s", playerName)
 	else
 		spellId = tonumber(spellId) or spellId
 		icon = spellIcon[spellId] or ""
-		text = string.format("%s < %+d [%s - %s]",  playerName,-tonumber(amount), srcName, spellName[spellId])
+		text = string.format("%s < %+d [%s - %s]", playerName, -tonumber(amount), srcName, spellName[spellId])
 	end
 	return icon, text, spellId
 end
 eventInfoChat.REZZ = function(event, playerName, class, spellId, rezzerName)
 	spellId = tonumber(spellId)
 	local icon = spellIcon[spellId]
-	local text = string.format("%s < [%s - %s]",  playerName, rezzerName,spellName[spellId])
+	local text = string.format("%s < [%s - %s]", playerName, rezzerName, spellName[spellId])
 	return icon, text, spellId
 end
 
 
-function view:Report(merged, num_lines)
-	local set = addon:GetSet(addon.nav.set)
+function view:Report(merged, num_lines,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then return end
 	local dl = set.deathlog
 	if not dl then return end
@@ -141,11 +141,10 @@ function view:Report(merged, num_lines)
 	if not self.last then return end
 
 	local total = set.start and set.now and (set.now - set.start) or 1
-	local v = addon.types[addon.nav.type]
+	local v = addon.types[addon.nav[windowID].type]
 	local datetext, timetext = addon:GetDuration(set)
-	--print(total, set.name, v.name, datetext, timetext)
 	addon:PrintLine("# %s for %s %s ", v.name, set.name, datetext and format(" [%s %s]", datetext, timetext) or "")
-	
+
 	for index, value in ipairs(dl) do
 		local entry = value
 
@@ -158,7 +157,6 @@ function view:Report(merged, num_lines)
 		else
 			rightText = "";
 		end
-		addon:PrintLine("# %s %s",rightText, text)
-		--print(index,rightText, text)
+		addon:PrintLine("# %s %s", rightText, text)
 	end
 end

@@ -3,66 +3,45 @@ local view = {}
 addon.views["Type"] = view
 view.first = 1
 
-local backAction = function(f)
+local backAction = function(f,windowID)
 	view.first = 1
-	addon.nav.view = "Sets"
-	addon.nav.set = nil
-	addon:RefreshDisplay()
+	addon.nav[windowID].view = "Sets"
+	addon.nav[windowID].set = nil
+	addon:RefreshDisplay(nil,windowID)
 end
 
-local detailAction = function(f)
-	addon.nav.view = addon.types[f.typeid].view or "Units"
-	addon.nav.type = f.typeid
-	addon:RefreshDisplay()
+local detailAction = function(f,windowID)
+	addon.nav[windowID].view = addon.types[f.typeid].view or "Units"
+	addon.nav[windowID].type = f.typeid
+	addon:RefreshDisplay(nil,windowID)
 end
 
-function view:Init()
-	addon.window:SetTitle("Selection: Type", .1, .1, .1)
-	addon.window:SetBackAction(backAction)
-	addon.window1:SetTitle("Selection: Type", .1, .1, .1)
-	addon.window1:SetBackAction(backAction)
+function view:Init(windowID)
+	addon.windows[windowID]:SetTitle("Selection: Type", .1, .1, .1)
+	addon.windows[windowID]:SetBackAction(backAction)
 end
 
-local UpdateLine = function(window,t,i,view,amount,id)
 
-	local line = window:GetLine(i-view.first)
-	local c = t.c
-		
-		line:SetValues(1, 1)
-		line:SetLeftText(" %s", t.name)
-		if amount ~= 0 then
-			line:SetRightText(amount)
-		else
-			line:SetRightText("")
-		end
-		line:SetColor(c[1], c[2], c[3])
-		line.typeid = id
-		line:SetDetailAction(detailAction)
-		line:Show()
-
-
-end
-
-function view:Update()
-	local set = addon:GetSet(addon.nav.set)
+function view:Update(merged,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then return end
 	
 	local num = #addon.types
-	if addon.nav.set == "total" then
+	if addon.nav[windowID].set == "total" then
 		for i,t in pairs(addon.types) do
 			if t.onlyfights then
 				num = num -1
 			end
 		end
 	end
-	self.first, self.last = addon:GetArea(self.first, num)
+	self.first, self.last = addon:GetArea(self.first, num,windowID)
 	if not self.last then return end
 	
 	local id = self.first - 1
 	for i = self.first, self.last do
 		id = id + 1
 		local t = addon.types[id]
-		if addon.nav.set == "total" then
+		if addon.nav[windowID].set == "total" then
 			while t.onlyfights do
 				id = id + 1
 				t = addon.types[id]
@@ -81,12 +60,20 @@ function view:Update()
 				amount = amount + u[t.id2].total
 			end
 		end
-
-		--local line = addon.window:GetLine(i-self.first)
-		--local line = addon.window:GetLine(i-self.first)
-		UpdateLine(addon.window,t,i,self,amount,id)
-		UpdateLine(addon.window1,t,i,self,amount,id)
-		--local line1 = addon.window1:GetLine(i-self.first)
 		
+		local line = addon.windows[windowID]:GetLine(i-self.first)
+		local c = t.c
+		
+		line:SetValues(1, 1)
+		line:SetLeftText(" %s", t.name)
+		if amount ~= 0 then
+			line:SetRightText(amount)
+		else
+			line:SetRightText("")
+		end
+		line:SetColor(c[1], c[2], c[3])
+		line.typeid = id
+		line:SetDetailAction(detailAction)
+		line:Show()
 	end
 end

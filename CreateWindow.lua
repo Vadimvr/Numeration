@@ -1,9 +1,10 @@
 local a = select(2, ...);
 
-print("CreteWindow")
 a.CreteWindow = {}
 
-function a.CreteWindow:CreteWindow(window, name)
+function a.CreteWindow:CreteWindow(window, name,windowID)
+
+    window.ID = windowID;
     local lines = {}
 
     local noop = function() end
@@ -16,11 +17,12 @@ function a.CreteWindow:CreteWindow(window, name)
         edgeSize = 0,
         insets = { left = 0, right = 0, top = 0, bottom = 0 }
     }
-    local clickFunction = function(self, btn)
+    local clickFunction = function(self,btn)
         if btn == "LeftButton" then
-            self.detailAction(self)
+           
+            self.detailAction(self,windowID)
         elseif btn == "RightButton" then
-            backAction(self)
+            backAction(self,windowID)
         end
     end
 
@@ -66,10 +68,10 @@ function a.CreteWindow:CreteWindow(window, name)
 
         local dropdown = CreateFrame("Frame", "NumerationMenuFrame", nil, "UIDropDownMenuTemplate")
         local optionFunction = function(f, id, _, checked)
-            addon:SetOption(id, checked)
+            a:SetOption(id, checked)
         end
         local reportFunction = function(f, chatType, channel)
-            addon:Report(25, chatType, channel)
+            a:Report(25, chatType, channel,windowID)
             CloseDropDownMenus()
         end
         local menuTable = {
@@ -109,7 +111,7 @@ function a.CreteWindow:CreteWindow(window, name)
         }
 
         local scroll = self:CreateTexture(nil, "ARTWORK")
-        self.scroll = scroll
+        window.scroll = scroll
         scroll:SetTexture([[Interface\Buttons\WHITE8X8]])
         scroll:SetTexCoord(.8, 1, .8, 1)
         scroll:SetVertexColor(0, 0, 0, .8)
@@ -163,7 +165,6 @@ function a.CreteWindow:CreteWindow(window, name)
             if a.nav.set == "current" then
                 name = "Current Fight"
             else
-                print(a.nav.set)
                 local set = a:GetSet(a.nav.set)
                 if set then
                     name = set.name
@@ -195,9 +196,9 @@ function a.CreteWindow:CreteWindow(window, name)
 
         self.detailAction = noop
         self:SetScript("OnMouseDown", clickFunction)
-        self:SetScript("OnMouseWheel", function(window, num)
-            print("name window", name)
-            a:Scroll(window,num)
+        self:SetScript("OnMouseWheel", function(self, num)
+           
+            a:Scroll(windowID,num)
         end)
     end
 

@@ -3,24 +3,24 @@ local view = {}
 addon.views["Units"] = view
 view.first = 1
 
-local backAction = function(f)
+local backAction = function(f,i)
 	view.first = 1
-	addon.nav.view = "Type"
-	addon.nav.type = nil
-	addon:RefreshDisplay()
+	addon.nav[i].view = "Type"
+	addon.nav[i].type = nil
+	addon:RefreshDisplay(nil,i)
 end
 
-local detailAction = function(f)
-	addon.nav.view = "UnitSpells"
-	addon.nav.unit = f.unit
-	addon:RefreshDisplay()
+local detailAction = function(f,i)
+	addon.nav[i].view = "UnitSpells"
+	addon.nav[i].unit = f.unit
+	addon:RefreshDisplay(nil,i)
 end
 
-function view:Init()
-	local v = addon.types[addon.nav.type]
+function view:Init(i)
+	local v = addon.types[addon.nav[i].type]
 	local c = v.c
-	addon.window:SetTitle(v.name, c[1], c[2], c[3])
-	addon.window:SetBackAction(backAction)
+	addon.windows[i]:SetTitle(v.name, c[1], c[2], c[3])
+	addon.windows[i]:SetBackAction(backAction)
 end
 
 local sorttbl = {}
@@ -84,17 +84,17 @@ local updateTables = function(set, etype, etype2, merged)
 	return total
 end
 
-function view:Update(merged)
-	local set = addon:GetSet(addon.nav.set)
+function view:Update(merged,j)
+	local set = addon:GetSet(addon.nav[j].set)
 	if not set then return end
-	local etype = addon.types[addon.nav.type].id
-	local etype2 = addon.types[addon.nav.type].id2
+	local etype = addon.types[addon.nav[j].type].id
+	local etype2 = addon.types[addon.nav[j].type].id2
 	
 	-- compile and sort information table
 	local total = updateTables(set, etype, etype2, merged)
 	
 	-- display
-	self.first, self.last = addon:GetArea(self.first, #sorttbl)
+	self.first, self.last = addon:GetArea(self.first, #sorttbl,j)
 	if not self.last then return end
 	
 	local maxvalue = nameToValue[sorttbl[1]]
@@ -103,7 +103,7 @@ function view:Update(merged)
 		local value, time = nameToValue[sorttbl[i]], nameToTime[sorttbl[i]]
 		local c = addon.color[u.class]
 		
-		local line = addon.window:GetLine(i-self.first)
+		local line = addon.windows[j]:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		if u.owner then
 			line:SetLeftText("%i. %s <%s>", i, u.name, u.owner)
@@ -138,11 +138,11 @@ function view:GetXps(set, name, etype, merged)
 	return format("%.1f", value/time)
 end
 
-function view:Report(merged, num_lines)
-	local set = addon:GetSet(addon.nav.set)
+function view:Report(merged, num_lines,windowID)
+	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then return end
-	local etype = addon.types[addon.nav.type].id
-	local etype2 = addon.types[addon.nav.type].id2
+	local etype = addon.types[addon.nav[windowID].type].id
+	local etype2 = addon.types[addon.nav[windowID].type].id2
 	
 	-- compile and sort information table
 	local total = updateTables(set, etype, etype2, merged)
@@ -152,7 +152,7 @@ function view:Report(merged, num_lines)
 	end
 	
 	-- display
-	addon:PrintHeaderLine(set)
+	addon:PrintHeaderLine(set,windowID)
 	for i = 1, num_lines do
 		local u = set.unit[sorttbl[i]]
 		local value, time = nameToValue[sorttbl[i]], nameToTime[sorttbl[i]]

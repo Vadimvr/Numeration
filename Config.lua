@@ -22,7 +22,7 @@ n.windowsettings = {
 	linefontsize = 14,
 	linefontcolor = {1, 1, 1},
 }
-
+n.CountWindow =1;
 -- core settings
 n.coresettings = {
 	refreshinterval = 1,
