@@ -2,8 +2,7 @@ local a = select(2, ...);
 
 a.CreteWindow = {}
 
-function a.CreteWindow:CreteWindow(window, name,windowID)
-
+function a.CreteWindow:CreteWindow(window, name, windowID)
     window.ID = windowID;
     local lines = {}
 
@@ -17,12 +16,11 @@ function a.CreteWindow:CreteWindow(window, name,windowID)
         edgeSize = 0,
         insets = { left = 0, right = 0, top = 0, bottom = 0 }
     }
-    local clickFunction = function(self,btn)
+    local clickFunction = function(self, btn)
         if btn == "LeftButton" then
-           
-            self.detailAction(self,windowID)
+            self.detailAction(self, windowID)
         elseif btn == "RightButton" then
-            backAction(self,windowID)
+            backAction(self, windowID)
         end
     end
 
@@ -71,11 +69,11 @@ function a.CreteWindow:CreteWindow(window, name,windowID)
             a:SetOption(id, checked)
         end
         local reportFunction = function(f, chatType, channel)
-            a:Report(25, chatType, channel,windowID)
+            a:Report(25, chatType, channel, windowID)
             CloseDropDownMenus()
         end
         local menuTable = {
-            { text = "Numeration", isTitle = true,                               notCheckable = true, notClickable = true },
+            { text = "Numeration", isTitle = true,                                            notCheckable = true, notClickable = true },
             {
                 text = "Report",
                 notCheckable = true,
@@ -95,15 +93,48 @@ function a.CreteWindow:CreteWindow(window, name,windowID)
                 notCheckable = true,
                 hasArrow = true,
                 menuList = {
-                    { text = "Merge Pets w/ Owners",     arg1 = "petsmerged",                                                    func = optionFunction,                                                  checked = function() return
-                        a:GetOption("petsmerged") end,                                                                                                                                                                                                                  keepShownOnClick = true },
-                    { text = "Keep Only Boss Segments",  arg1 = "keeponlybosses",                                                func = optionFunction,                                                  checked = function() return
-                        a:GetOption("keeponlybosses") end,                                                                                                                                                                                                              keepShownOnClick = true },
-                    { text = "Record Only In Instances", arg1 = "onlyinstance",                                                  func = optionFunction,                                                  checked = function() return
-                        a:GetOption("onlyinstance") end,                                                                                                                                                                                                                keepShownOnClick = true },
-                    { text = "Show Minimap Icon",        func = function(f, a1, a2, checked) a:MinimapIconShow(
-                        checked) end,                                                                                            checked = function() return not
-                        NumerationCharOptions.minimap.hide end,                                                                                                                                          keepShownOnClick = true },
+                    {
+                        text = "Merge Pets w/ Owners",
+                        arg1 = "petsmerged",
+                        func = optionFunction,
+                        checked = function()
+                            return
+                                a:GetOption("petsmerged")
+                        end,
+                        keepShownOnClick = true
+                    },
+                    {
+                        text = "Keep Only Boss Segments",
+                        arg1 = "keeponlybosses",
+                        func = optionFunction,
+                        checked = function()
+                            return
+                                a:GetOption("keeponlybosses")
+                        end,
+                        keepShownOnClick = true
+                    },
+                    {
+                        text = "Record Only In Instances",
+                        arg1 = "onlyinstance",
+                        func = optionFunction,
+                        checked = function()
+                            return
+                                a:GetOption("onlyinstance")
+                        end,
+                        keepShownOnClick = true
+                    },
+                    {
+                        text = "Show Minimap Icon",
+                        func = function(f, a1, a2, checked)
+                            a:MinimapIconShow(
+                                checked)
+                        end,
+                        checked = function()
+                            return not
+                                NumerationCharOptions.minimap.hide
+                        end,
+                        keepShownOnClick = true
+                    },
                 },
             },
             { text = "",           notClickable = true },
@@ -153,9 +184,9 @@ function a.CreteWindow:CreteWindow(window, name,windowID)
         segment:SetPoint("RIGHT", reset, "LEFT", -2, 0)
         segment:SetScript("OnMouseUp",
             function()
-                a.nav.view = "Sets"
-                a.nav.set = nil
-                a:RefreshDisplay()
+                a.nav[windowID].view = "Sets"
+                a.nav[windowID].set = nil
+                a:RefreshDisplay(nil, windowID)
                 dropdown:Show()
             end)
         segment:SetScript("OnEnter", function()
@@ -197,8 +228,7 @@ function a.CreteWindow:CreteWindow(window, name,windowID)
         self.detailAction = noop
         self:SetScript("OnMouseDown", clickFunction)
         self:SetScript("OnMouseWheel", function(self, num)
-           
-            a:Scroll(windowID,num)
+            a:Scroll(windowID, num)
         end)
     end
 
@@ -334,55 +364,53 @@ function a.CreteWindow:CreteWindow(window, name,windowID)
     end
 
     local reset
-    function window:ShowResetWindow(first)
-        if first then
-            if not reset then
-                reset = CreateFrame("Frame", nil, window)
-                reset:SetBackdrop(backdrop)
-                reset:SetBackdropColor(0, 0, 0, 1)
-                reset:SetWidth(200)
-                reset:SetHeight(45)
-                reset:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
+    function window:ShowResetWindow()
+        if not reset then
+            reset = CreateFrame("Frame", nil, window)
+            reset:SetBackdrop(backdrop)
+            reset:SetBackdropColor(0, 0, 0, 1)
+            reset:SetWidth(200)
+            reset:SetHeight(45)
+            reset:SetPoint("CENTER", UIParent, "CENTER", 0, 200)
 
-                reset.title = reset:CreateTexture(nil, "ARTWORK")
-                reset.title:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
-                reset.title:SetTexCoord(.8, 1, .8, 1)
-                reset.title:SetVertexColor(.1, .1, .1, .9)
-                reset.title:SetPoint("TOPLEFT", 1, -1)
-                reset.title:SetPoint("BOTTOMRIGHT", reset, "TOPRIGHT", -1, -s.titleheight - 1)
+            reset.title = reset:CreateTexture(nil, "ARTWORK")
+            reset.title:SetTexture([[Interface\TargetingFrame\UI-StatusBar]])
+            reset.title:SetTexCoord(.8, 1, .8, 1)
+            reset.title:SetVertexColor(.1, .1, .1, .9)
+            reset.title:SetPoint("TOPLEFT", 1, -1)
+            reset.title:SetPoint("BOTTOMRIGHT", reset, "TOPRIGHT", -1, -s.titleheight - 1)
 
-                reset.titletext = reset:CreateFontString(nil, "ARTWORK")
-                reset.titletext:SetFont(s.titlefont, s.titlefontsize, "OUTLINE")
-                reset.titletext:SetTextColor(s.titlefontcolor[1], s.titlefontcolor[2], s.titlefontcolor[3], 1)
-                reset.titletext:SetText("Numeration: Reset Data?")
-                reset.titletext:SetPoint("TOPLEFT", 5, -2)
+            reset.titletext = reset:CreateFontString(nil, "ARTWORK")
+            reset.titletext:SetFont(s.titlefont, s.titlefontsize, "OUTLINE")
+            reset.titletext:SetTextColor(s.titlefontcolor[1], s.titlefontcolor[2], s.titlefontcolor[3], 1)
+            reset.titletext:SetText("Numeration: Reset Data?")
+            reset.titletext:SetPoint("TOPLEFT", 5, -2)
 
-                reset.yes = CreateFrame("Button", nil, reset)
-                reset.yes:SetBackdrop(backdrop)
-                reset.yes:SetBackdropColor(0, .2, 0, 1)
-                reset.yes:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
-                reset.yes:SetNormalFontObject(ChatFontSmall)
-                reset.yes:SetText("YES")
-                reset.yes:SetWidth(80)
-                reset.yes:SetHeight(18)
-                reset.yes:SetPoint("BOTTOMLEFT", 10, 5)
-                reset.yes:SetScript("OnMouseUp", function()
-                    addon:Reset()
-                    reset:Hide()
-                end)
+            reset.yes = CreateFrame("Button", nil, reset)
+            reset.yes:SetBackdrop(backdrop)
+            reset.yes:SetBackdropColor(0, .2, 0, 1)
+            reset.yes:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
+            reset.yes:SetNormalFontObject(ChatFontSmall)
+            reset.yes:SetText("YES")
+            reset.yes:SetWidth(80)
+            reset.yes:SetHeight(18)
+            reset.yes:SetPoint("BOTTOMLEFT", 10, 5)
+            reset.yes:SetScript("OnMouseUp", function()
+                a:Reset()
+                reset:Hide()
+            end)
 
-                reset.no = CreateFrame("Button", nil, reset)
-                reset.no:SetBackdrop(backdrop)
-                reset.no:SetBackdropColor(.2, 0, 0, 1)
-                reset.no:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
-                reset.no:SetNormalFontObject(ChatFontSmall)
-                reset.no:SetText("NO")
-                reset.no:SetWidth(80)
-                reset.no:SetHeight(18)
-                reset.no:SetPoint("BOTTOMRIGHT", -10, 5)
-                reset.no:SetScript("OnMouseUp", function() reset:Hide() end)
-            end
-            reset:Show()
+            reset.no = CreateFrame("Button", nil, reset)
+            reset.no:SetBackdrop(backdrop)
+            reset.no:SetBackdropColor(.2, 0, 0, 1)
+            reset.no:SetHighlightTexture([[Interface\QuestFrame\UI-QuestTitleHighlight]])
+            reset.no:SetNormalFontObject(ChatFontSmall)
+            reset.no:SetText("NO")
+            reset.no:SetWidth(80)
+            reset.no:SetHeight(18)
+            reset.no:SetPoint("BOTTOMRIGHT", -10, 5)
+            reset.no:SetScript("OnMouseUp", function() reset:Hide() end)
         end
+        reset:Show()
     end
 end

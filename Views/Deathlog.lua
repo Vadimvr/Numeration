@@ -137,7 +137,7 @@ function view:Report(merged, num_lines,windowID)
 	if not dl then return end
 
 	-- display
-	self.first, self.last = addon:GetArea(self.first, #dl)
+	self.first, self.last = addon:GetArea(self.first, #dl,windowID)
 	if not self.last then return end
 
 	local total = set.start and set.now and (set.now - set.start) or 1

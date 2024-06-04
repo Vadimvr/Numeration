@@ -203,33 +203,27 @@ function addon:InitOptions()
 	if not NumerationCharOptions.nav then
 		NumerationCharOptions.nav = {
 			[1] = {
-
-				view = "Units",
-				set = "current",
-				type = 1,
-			},
-			[2] = {
-
 				view = "Units",
 				set = "current",
 				type = 1,
 			}
 		}
 	end
-	self.nav = {
-		[1] = {
 
-			view = "Units",
-			set = "current",
-			type = 1,
-		},
-		[2] = {
+	self.nav = {};
 
-			view = "Units",
-			set = "current",
-			type = 1,
-		}
-	};
+	for i = 1, addon.CountWindow, 1 do
+		if NumerationCharOptions.nav[i] then
+			self.nav[i] = NumerationCharOptions.nav[i];
+		else
+			self.nav[i] = {
+				view = "Units",
+				set = "current",
+				type = 1,
+			}
+		end
+	end
+	NumerationCharOptions.nav = self.nav;
 end
 
 function ldb:OnTooltipShow()
@@ -255,7 +249,7 @@ function addon:ToggleVisibility()
 	else
 		self.windows:Show()
 		for i = 1, addon.CountWindow, 1 do
-			self:RefreshDisplay(nil,i)
+			self:RefreshDisplay(nil, i)
 		end
 	end
 end
@@ -274,7 +268,9 @@ function addon:SetOption(option, value)
 	if option == "onlyinstance" then
 		self:ZONE_CHANGED_NEW_AREA(true)
 	elseif option == "petsmerged" then
-		self:RefreshDisplay(true)
+		for i = 1, addon.CountWindow, 1 do
+			self:RefreshDisplay(true, i)
+		end
 	end
 end
 
@@ -290,11 +286,14 @@ function addon:Reset()
 	}
 	NumerationCharDB[0].name = "Overall"
 	current = newSet()
-	if self.nav.set and self.nav.set ~= "total" and self.nav.set ~= "current" then
-		self.nav.set = "current"
-	end
-	for i = 1, addon.CountWindow, 1 do
-		self:RefreshDisplay(nil,i)
+
+	for windowID = 1, addon.CountWindow, 1 do
+		if self.nav[windowID].set and self.nav[windowID].set ~= "total" and self.nav[windowID].set ~= "current" then
+			self.nav[windowID].set = "current"
+		end
+		for i = 1, addon.CountWindow, 1 do
+			self:RefreshDisplay(nil, i)
+		end
 	end
 	collectgarbage("collect")
 end
@@ -303,7 +302,10 @@ local updateTimer = CreateFrame("Frame")
 updateTimer:Hide()
 updateTimer:SetScript("OnUpdate", function(self, elapsed)
 	self.timer = self.timer - elapsed
-	if self.timer > 0 then return end
+	if self.timer > 0 then
+		--	print("end")
+		return
+	end
 	self.timer = s.refreshinterval
 
 	if current.changed then
@@ -311,10 +313,13 @@ updateTimer:SetScript("OnUpdate", function(self, elapsed)
 	end
 
 	local set = addon.nav.set and addon:GetSet(addon.nav.set) or current
-	if not set or not set.changed then return end
-	set.changed = nil
 
-	addon:RefreshDisplay(true,-1)
+	if not set or not set.changed then return end
+
+	set.changed = nil
+	for index = 1, addon.CountWindow, 1 do
+		addon:RefreshDisplay(true, index)
+	end
 end)
 function updateTimer:Activate()
 	self.timer = s.refreshinterval
@@ -325,17 +330,18 @@ function updateTimer:Refresh()
 	self.timer = s.refreshinterval
 end
 
-function addon:RefreshDisplay(update,i)
-	if self.windows[i]:IsShown() then
-		self.windows[i]:Clear()
+function addon:RefreshDisplay(update, windowID)
+	--	print(update, windowID)
+	if self.windows[windowID]:IsShown() then
+		self.windows[windowID]:Clear()
 
 		if not update then
-
-			self.views[self.nav[i].view]:Init(i)
-			local segment = self.nav[i].set == "total" and "O" or self.nav[i].set == "current" and "C" or self.nav[i].set
-			self.windows:UpdateSegment(segment,i)
+			self.views[self.nav[windowID].view]:Init(windowID)
+			local segment = self.nav[windowID].set == "total" and "O" or self.nav[windowID].set == "current" and "C" or
+				self.nav[windowID].set
+			self.windows:UpdateSegment(segment, windowID)
 		end
-		self.views[self.nav[i].view]:Update(NumerationCharOptions.petsmerged,i)
+		self.views[self.nav[windowID].view]:Update(NumerationCharOptions.petsmerged, windowID)
 	end
 	if not update then
 		ldb.text = self.views["Units"]:GetXps(current, UnitName("player"), "dd", NumerationCharOptions.petsmerged)
@@ -345,7 +351,7 @@ function addon:RefreshDisplay(update,i)
 end
 
 local useChatType, useChannel
-function addon:Report(lines, chatType, channel,windowID)
+function addon:Report(lines, chatType, channel, windowID)
 	useChatType, useChannel = chatType, channel
 	if channel == "target" then
 		useChannel = UnitName("target")
@@ -356,13 +362,13 @@ function addon:Report(lines, chatType, channel,windowID)
 	end
 	local view = self.views[self.nav[windowID].view]
 	if view.Report then
-		view:Report(NumerationCharOptions.petsmerged, lines,windowID)
+		view:Report(NumerationCharOptions.petsmerged, lines, windowID)
 	else
 		print("Report is not supported by '", self.nav[windowID].view, "'-view")
 	end
 end
 
-function addon:PrintHeaderLine(set,windowID)
+function addon:PrintHeaderLine(set, windowID)
 	local datetext, timetext = self:GetDuration(set)
 	self:PrintLine("# %s for %s%s", self.windows[windowID]:GetTitle(), set.name,
 		datetext and format(" [%s %s]", datetext, timetext) or "")
@@ -387,10 +393,10 @@ function addon:Scroll(windowID, dir)
 			view.first = view.first + 1
 		end
 	end
-	self:RefreshDisplay(true,windowID)
+	self:RefreshDisplay(true, windowID)
 end
 
-function addon:GetArea(start, total,i)
+function addon:GetArea(start, total, i)
 	if total == 0 then return start end
 
 	local first = start
@@ -425,7 +431,7 @@ function addon:GetDuration(set)
 	if not set.start or not set.now then return end
 	local duration = math.ceil(set.now - set.start)
 	local durationtext = duration < 60 and format("%is", duration % 60) or
-	format("%im%is", math.floor(duration / 60), duration % 60)
+		format("%im%is", math.floor(duration / 60), duration % 60)
 	return date("%H:%M", set.start), durationtext
 end
 
@@ -560,7 +566,7 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 			updateTimer:Activate()
 			if not NumerationCharOptions.forcehide then
 				for i = 1, addon.CountWindow, 1 do
-					self:RefreshDisplay(nil,i)
+					self:RefreshDisplay(nil, i)
 				end
 				self.windows:Show()
 			end
@@ -578,7 +584,7 @@ function addon:ZONE_CHANGED_NEW_AREA(force)
 			if zoneType == "none" then
 				if not NumerationCharOptions.forcehide then
 					for i = 1, addon.CountWindow, 1 do
-						self:RefreshDisplay(nil,i)
+						self:RefreshDisplay(nil, i)
 					end
 					self.windows:Show()
 				end
@@ -647,7 +653,9 @@ function addon:LeaveCombatEvent()
 		end
 
 		-- Refresh View
-		self:RefreshDisplay(true)
+		for i = 1, addon.CountWindow, 1 do
+			self:RefreshDisplay(true, i)
+		end
 	end
 end
 
