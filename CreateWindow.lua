@@ -25,7 +25,7 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
     end
 
     local s
-    function window:OnInitialize()
+    function window:OnInitialize(windowID)
         s = a.windowsettings
         self.maxlines = s.maxlines
         self:SetWidth(s.width)
@@ -47,14 +47,15 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
             xOfs = xOfs * s - GetScreenWidth() * uis / 2
             yOfs = yOfs * s - GetScreenHeight() * uis / 2
 
-            a:SetOption("x", xOfs / uis)
-            a:SetOption("y", yOfs / uis)
+            a:SetOption("x" .. tostring(windowID), xOfs / uis)
+            a:SetOption("y" .. tostring(windowID), yOfs / uis)
+            -- print(xOfs / uis,yOfs / uis)
         end)
 
         self:SetBackdrop(backdrop)
         self:SetBackdropColor(0, 0, 0, s.backgroundalpha)
 
-        local x, y = a:GetOption("x"), a:GetOption("y")
+        local x, y = a:GetOption("x" .. tostring(windowID)), a:GetOption("y" .. tostring(windowID))
         if not x or not y then
             self:SetPoint(unpack(s.pos))
         else
@@ -73,7 +74,7 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
             CloseDropDownMenus()
         end
         local menuTable = {
-            { text = "Numeration", isTitle = true,                                            notCheckable = true, notClickable = true },
+            { text = "Numeration", isTitle = true,                               notCheckable = true, notClickable = true },
             {
                 text = "Report",
                 notCheckable = true,

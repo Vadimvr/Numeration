@@ -12,7 +12,7 @@ end
 
 function addon.windows:OnInitialize()
 	for i = 1, CountWindow, 1 do
-		addon.windows[i]:OnInitialize()
+		addon.windows[i]:OnInitialize(i)
 	end
 end
 

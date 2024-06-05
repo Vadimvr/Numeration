@@ -206,7 +206,7 @@ function addon:InitOptions()
 				view = "Units",
 				set = "current",
 				type = 1,
-			}
+			},
 		}
 	end
 

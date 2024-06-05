@@ -2,7 +2,7 @@ local n = select(2, ...)
 
 -- window settings
 n.windowsettings = {
-	pos = { "TOPLEFT", 4, -4 },
+	pos = { "TOPLEFT", 10, -10 },
 	width = 220,
 	maxlines = 6,
 	backgroundalpha = 1,
