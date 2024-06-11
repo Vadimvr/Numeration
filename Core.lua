@@ -235,7 +235,7 @@ end
 function ldb:OnClick(button)
 	if button == "LeftButton" then
 		if IsShiftKeyDown() then
-			addon.windows:ShowResetWindow()
+			addon.windows:ShowResetWindow(true)
 		else
 			addon:ToggleVisibility()
 		end

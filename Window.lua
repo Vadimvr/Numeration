@@ -29,9 +29,10 @@ function addon.windows:Show()
 end
 
 function addon.windows:ShowResetWindow()
-	addon.windows[1]:ShowResetWindow(true)
+
 	for i = 2, CountWindow, 1 do
-		addon.windows[i]:ShowResetWindow(false);
+		addon.windows[i]:ShowResetWindow();
+		break;
 	end
 end
 

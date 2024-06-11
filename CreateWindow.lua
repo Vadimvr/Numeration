@@ -364,8 +364,9 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
         return f
     end
 
-    local reset
-    function window:ShowResetWindow()
+    local reset;
+
+    function window:ShowResetWindow(iconMinimap)
         if not reset then
             reset = CreateFrame("Frame", nil, window)
             reset:SetBackdrop(backdrop)
