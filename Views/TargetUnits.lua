@@ -38,14 +38,12 @@ end
 local updateTables = function(set, target, etype, merged)
 	local total = 0
 	for name,u in pairs(set.unit) do
-	--	print(name,target)
 		if u[etype] and u[etype].target and u[etype].target[target] then
 			total = total + u[etype].target[target]
 
 			local time = u[etype] and u[etype].time or 0
 
 			local ou = merged and u.owner and set.unit[u.owner] or u
-			--print(set.unit,time,total, etype,ou)
 			if unitToValue[ou] then
 				unitToValue[ou] = unitToValue[ou] + u[etype].target[target]
 				if unitToTime[ou] < time then

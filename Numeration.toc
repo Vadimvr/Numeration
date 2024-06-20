@@ -24,6 +24,8 @@ Views\Type.lua
 Views\Units.lua
 Views\UnitSpells.lua
 Views\UnitTargets.lua
+Views\UnitTargetsHeal.lua
+Views\UnitTargetsHealSpell.lua
 
 Views\Targets.lua
 Views\TargetUnits.lua

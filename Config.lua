@@ -3,7 +3,7 @@ local n = select(2, ...)
 -- window settings
 n.windowsettings = {
 	pos = { "TOPLEFT", 10, -10 },
-	width = 220,
+	width = 550,
 	maxlines = 6,
 	backgroundalpha = 1,
 	scrollbar = true,

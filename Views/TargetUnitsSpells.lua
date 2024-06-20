@@ -64,9 +64,9 @@ local updateTables = function(set, u, etype, merged, targetName)
 	if merged and u.pets then
 		for petname, v in pairs(u.pets) do
 			local pu = set.unit[petname]
-			if pu[etype] then
-				total = total + pu[etype].total
-				for id, amount in pairs(pu[etype].spell) do
+			if pu[etype] and pu[etype].target and pu[etype].target[targetName] then
+				total = total + pu[etype].target[targetName]
+				for id, amount in pairs(pu[etype].targetSpell[targetName].spells) do
 					local name = format("%s%s", pu.name, id)
 					nameToValue[name] = amount
 					nameToPetName[name] = pu.name
