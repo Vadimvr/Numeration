@@ -27,6 +27,7 @@ Views\UnitTargets.lua
 
 Views\Targets.lua
 Views\TargetUnits.lua
+Views\TargetUnitsSpells.lua
 
 Views\Spells.lua
 Views\SpellUnits.lua

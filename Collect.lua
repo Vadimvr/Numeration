@@ -392,15 +392,26 @@ local function addSpellDetails(u, etype, spellID, amount)
 
 	event.spell[spellID] = (event.spell[spellID] or 0) + amount
 end
-local function addTargetDetails(u, etype, targetName, amount)
+local function addTargetDetails(u, etype, targetName, amount, spellID)
 	if not targetName then targetName = "Unknown" end
 	local t = u[etype].target
 	if not t then
 		t = {}
 		u[etype].target = t
 	end
-
 	t[targetName] = (t[targetName] or 0) + amount
+	--#region добавление данных об уроне в конкретную цель
+	local ts = u[etype].targetSpell
+	if not ts then
+		ts = {}
+		u[etype].targetSpell = ts
+	end
+
+	if (not ts[targetName]) then
+		ts[targetName] = { spells = {} }
+	end
+	ts[targetName].spells[spellID] = (ts[targetName].spells[spellID] or 0) + amount;
+	--#endregion
 end
 
 local function updateTime(u, etype, timestamp)
@@ -433,7 +444,7 @@ local function EVENT(etype, playerID, playerName, targetName, spellID, amount, t
 	atm.changed = true
 	local u = addon:GetUnit(atm, playerID, playerName)
 	addSpellDetails(u, etype, spellID, amount)
-	addTargetDetails(u, etype, targetName, amount)
+	addTargetDetails(u, etype, targetName, amount, spellID)
 	if timestamp then updateTime(u, etype, timestamp) end
 end
 
@@ -525,7 +536,6 @@ collect.SPELL_BUILDING_MISSED = collect.SPELL_MISSED
 collect.RANGE_MISSED = collect.SPELL_MISSED
 collect.DAMAGE_SHIELD_MISSED = collect.SPELL_MISSED
 function collect.SWING_MISSED(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, missType, amountMissed)
-
 	collect.SPELL_MISSED(timestamp, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, 0, "Melee", 0x01, missType,
 		amountMissed)
 end

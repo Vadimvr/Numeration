@@ -10,6 +10,12 @@ local backAction = function(f,windowID)
 	addon:RefreshDisplay(nil,windowID)
 end
 
+local detailAction = function(f,windowID)
+	addon.nav[windowID].view = "TargetUnitsSpells"
+	addon.nav[windowID].sourceName = f.sourceName;
+	addon:RefreshDisplay(nil,windowID)
+end
+
 function view:Init(windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then backAction(nil, windowID) return end
@@ -17,12 +23,14 @@ function view:Init(windowID)
 	
 	local t = addon.types[addon.nav[windowID].type]
 	local text = format("%s: %s", t.name, target)
-	addon.windows[windowID]:SetTitle(text, t.c[1], t.c[2], t.c[3])
+	addon.windows[windowID]:SetTitle(text , t.c[1], t.c[2], t.c[3])
 	addon.windows[windowID]:SetBackAction(backAction)
 end
 
 local sorttbl = {}
 local unitToValue = {}
+local unitToTime = {}
+
 local sorter = function(u1, u2)
 	return unitToValue[u1] > unitToValue[u2]
 end
@@ -30,13 +38,22 @@ end
 local updateTables = function(set, target, etype, merged)
 	local total = 0
 	for name,u in pairs(set.unit) do
+	--	print(name,target)
 		if u[etype] and u[etype].target and u[etype].target[target] then
 			total = total + u[etype].target[target]
+
+			local time = u[etype] and u[etype].time or 0
+
 			local ou = merged and u.owner and set.unit[u.owner] or u
+			--print(set.unit,time,total, etype,ou)
 			if unitToValue[ou] then
 				unitToValue[ou] = unitToValue[ou] + u[etype].target[target]
+				if unitToTime[ou] < time then
+					unitToTime[ou] = time
+				end
 			else
 				unitToValue[ou] = u[etype].target[target]
+				unitToTime[ou] = time
 				tinsert(sorttbl, ou)
 			end
 		end
@@ -50,8 +67,6 @@ function view:Update(merged,windowID)
 	if not set then backAction(nil, windowID) return end
 	local target = addon.nav[windowID].target
 	local etype = addon.types[addon.nav[windowID].type].id
-	
-	-- compile and sort information table
 	local total = updateTables(set, target, etype, merged)
 	
 	-- display
@@ -61,7 +76,9 @@ function view:Update(merged,windowID)
 	local maxvalue = unitToValue[sorttbl[1]]
 	for i = self.first, self.last do
 		local u = sorttbl[i]
+	
 		local value = unitToValue[u]
+		local  time = unitToTime[u]
 		local c = addon.color[u.class]
 		
 		local line = addon.windows[windowID]:GetLine(i-self.first)
@@ -71,9 +88,16 @@ function view:Update(merged,windowID)
 		else
 			line:SetLeftText("%i. %s", i, u.name)
 		end
-		line:SetRightText("%i (%02.1f%%)", value, value/total*100)
+		if time ~= 0 then
+			line:SetRightText("%i (%.1f, %02.1f%%)", value, value/time, value/total*100)
+		else
+			line:SetRightText("%i (%02.1f%%)", value, value/total*100)
+		end
 		line:SetColor(c[1], c[2], c[3])
-		line:SetDetailAction(nil)
+	--	print("Line.target", target)
+		--line.target = target
+		line.sourceName = u.name
+		line:SetDetailAction(detailAction)
 		line:Show()
 	end
 	
