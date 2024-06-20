@@ -37,7 +37,6 @@ function addon.windows:ShowResetWindow()
 end
 
 function addon.windows:UpdateSegment(segment,i)
-	--print("Window",39, i);
 	addon.windows[i]:UpdateSegment(segment)
 end
 

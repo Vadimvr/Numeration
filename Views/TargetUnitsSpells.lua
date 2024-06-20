@@ -22,12 +22,6 @@ function view:Init(windowID)
 		return
 	end
 	local u = set.unit[addon.nav[windowID].sourceName]
-
-	-- print(">>>set init", set, addon.nav[windowID].set)
-	-- for key, value in pairs(u) do
-	-- 	print("--->>>",key,value)
-	-- end
-
 	if not u then
 		backAction(nil, windowID)
 		return
@@ -51,15 +45,13 @@ local nameToValue = {}
 local nameToPetName = {}
 local nameToId = {}
 local sorter = function(n1, n2)
---	print("sorter", n1, n2)
 	return nameToValue[n1] > nameToValue[n2]
 end
 
 local updateTables = function(set, u, etype, merged, targetName)
-	--	print("updateTables ", set, u, etype, merged,targetName)
 	if not etype then return 0 end
 	local total = 0
-	if u[etype] then
+	if u[etype] and u[etype].target and u[etype].target[targetName] then
 		-- dd .
 		total = u[etype].target[targetName]
 		for id, amount in pairs(u[etype].targetSpell[targetName].spells) do
@@ -103,7 +95,6 @@ function view:Update(merged, windowID)
 	end
 	local etype = addon.types[addon.nav[windowID].type].id
 	local etype2 = addon.types[addon.nav[windowID].type].id2
-	--	print("etype = ", etype, "etype2 = ", etype2, "targetName", targetName)
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged, targetName)
 	total = total + updateTables(set, u, etype2, merged, targetName)

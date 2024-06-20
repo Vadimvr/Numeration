@@ -526,7 +526,6 @@ function collect.SPELL_MISSED(timestamp, srcGUID, srcName, srcFlags, dstGUID, ds
 		end
 	end
 	if (addon.guidToClass[srcGUID] and missType == "PARRY") then
-		--print("SPELL_MISSED ","pr", srcGUID, srcName, dstName, spellId, 1)
 		EVENT("pr", srcGUID, srcName, dstName, spellId, 1)
 	end
 end
