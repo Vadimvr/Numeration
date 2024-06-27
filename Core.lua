@@ -224,6 +224,9 @@ function addon:InitOptions()
 		end
 	end
 	NumerationCharOptions.nav = self.nav;
+	if(not 	NumerationCharOptions["maxlines"]) then
+		NumerationCharOptions["maxlines"] = {}
+	end
 end
 
 function ldb:OnTooltipShow()

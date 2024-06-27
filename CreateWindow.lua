@@ -24,9 +24,16 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
         end
     end
 
+
+    function window:UpdateBackdrop(windowID)
+        local s = a.windowsSettings[windowID] or a.windowsettings;
+        self:SetBackdrop(backdrop)
+        self:SetBackdropColor(0, 0, 0, s.backgroundalpha)
+    end
+
     local s
     function window:OnInitialize(windowID)
-        s = a.windowsettings
+        s = a.windowsSettings[windowID] or a.windowsettings;
         self.maxlines = s.maxlines
         self:SetWidth(s.width)
         self:SetHeight(3 + s.titleheight + s.maxlines * (s.lineheight + s.linegap))
@@ -52,8 +59,7 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
             -- print(xOfs / uis,yOfs / uis)
         end)
 
-        self:SetBackdrop(backdrop)
-        self:SetBackdropColor(0, 0, 0, s.backgroundalpha)
+        self:UpdateBackdrop(windowID)
 
         local x, y = a:GetOption("x" .. tostring(windowID)), a:GetOption("y" .. tostring(windowID))
         if not x or not y then
@@ -136,10 +142,22 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
                         end,
                         keepShownOnClick = true
                     },
+                    {
+                        text = "Lines",
+                        notCheckable = true,
+                        hasArrow = true,
+                        menuList = {
+                            { text = "+ 2", func = function() a.windows:Update(windowID, 2) end,  notCheckable = true },
+                            { text = "+ 1", func = function() a.windows:Update(windowID, 1) end,  notCheckable = true },
+                            { text = "- 1", func = function() a.windows:Update(windowID, -1) end, notCheckable = true },
+                            { text = "- 2", func = function() a.windows:Update(windowID, -2) end, notCheckable = true }
+                        },
+                    }
                 },
             },
             { text = "",           notClickable = true },
             { text = "Reset",      func = function() self:ShowResetWindow() end, notCheckable = true },
+            --  { text = "del",        func = function() a.windows:Update(windowID) end, notCheckable = true },
         }
 
         local scroll = self:CreateTexture(nil, "ARTWORK")
