@@ -3,7 +3,7 @@ local n = select(2, ...)
 -- window settings
 n.windowsettings = {
 	pos = { "TOPLEFT", 10, -10 },
-	width = 220,
+	width = 230,
 	maxlines = 6,
 	backgroundalpha = 1,
 	scrollbar = true,
@@ -12,7 +12,7 @@ n.windowsettings = {
 	titlealpha = 0.9,
 	titlefont = [[Fonts\ARIALN.TTF]],
 	titlefontsize = 13,
-	titlefontcolor = {1, .82, 0},
+	titlefontcolor = { 1, .82, 0 },
 
 	lineheight = 15,
 	linegap = 1,
@@ -20,9 +20,56 @@ n.windowsettings = {
 	linetexture = [[Interface\Tooltips\UI-Tooltip-Background]],
 	linefont = [[Fonts\ARIALN.TTF]],
 	linefontsize = 14,
-	linefontcolor = {1, 1, 1},
+	linefontcolor = { 1, 1, 1 },
 }
-n.CountWindow =2;
+
+n.windowsSettings = {
+	[1] = {
+		pos = { "TOPLEFT", 10, -10 },
+		width = n.windowsettings.width,
+		maxlines = n.windowsettings.maxlines,
+		backgroundalpha = 1,
+		scrollbar = true,
+
+		titleheight = 16,
+		titlealpha = 0.9,
+		titlefont = [[Fonts\ARIALN.TTF]],
+		titlefontsize = 13,
+		titlefontcolor = { 1, .82, 0 },
+
+		lineheight = 15,
+		linegap = 1,
+		linealpha = 1,
+		linetexture = [[Interface\Tooltips\UI-Tooltip-Background]],
+		linefont = [[Fonts\ARIALN.TTF]],
+		linefontsize = 14,
+		linefontcolor = { 1, 1, 1 },
+	},
+	[2] = {
+		pos = { "TOPLEFT", 10, -10 },
+		width = n.windowsettings.width,
+		maxlines = n.windowsettings.maxlines,
+		backgroundalpha = 1,
+		scrollbar = true,
+
+		titleheight = 16,
+		titlealpha = 0.9,
+		titlefont = [[Fonts\ARIALN.TTF]],
+		titlefontsize = 13,
+		titlefontcolor = { 1, .82, 0 },
+
+		lineheight = 15,
+		linegap = 1,
+		linealpha = 1,
+		linetexture = [[Interface\Tooltips\UI-Tooltip-Background]],
+		linefont = [[Fonts\ARIALN.TTF]],
+		linefontsize = 14,
+		linefontcolor = { 1, 1, 1 },
+	},
+}
+
+
+n.CountWindow = 2;
 -- core settings
 n.coresettings = {
 	refreshinterval = 1,
@@ -35,79 +82,79 @@ n.types = {
 	{
 		name = "Damage",
 		id = "dd",
-		c = {.25, .66, .35},
+		c = { .25, .66, .35 },
 	},
 	{
 		name = "Damage Targets",
 		id = "dd",
 		view = "Targets",
 		onlyfights = true,
-		c = {.25, .66, .35},
+		c = { .25, .66, .35 },
 	},
 	{
 		name = "Damage Taken: Targets",
 		id = "dt",
 		view = "Targets",
 		onlyfights = true,
-		c = {.66, .25, .25},
+		c = { .66, .25, .25 },
 	},
 	{
 		name = "Damage Taken: Abilities",
 		id = "dt",
 		view = "Spells",
-		c = {.66, .25, .25},
+		c = { .66, .25, .25 },
 	},
 	{
 		name = "Friendly Fire",
 		id = "ff",
-		c = {.63, .58, .24},
+		c = { .63, .58, .24 },
 	},
 	{
 		name = "Healing + Absorbs",
 		id = "hd",
 		id2 = "ga",
-		c = {.25, .5, .85},
+		c = { .25, .5, .85 },
 	},
 	{
 		name = "Healing",
 		id = "hd",
-		c = {.25, .5, .85},
+		c = { .25, .5, .85 },
 	},
 	{
 		name = "Guessed Absorbs",
 		id = "ga",
-		c = {.25, .5, .85},
+		c = { .25, .5, .85 },
 	},
 	{
 		name = "Overhealing",
 		id = "oh",
-		c = {.25, .5, .85},
+		c = { .25, .5, .85 },
 	},
 	{
 		name = "Dispels",
 		id = "dp",
-		c = {.58, .24, .63},
+		c = { .58, .24, .63 },
 	},
 	{
 		name = "Interrupts",
 		id = "ir",
-		c = {.09, .61, .55},
+		c = { .09, .61, .55 },
 	},
 	{
 		name = "Power Gains",
 		id = "pg",
-		c = {48/255, 113/255, 191/255},
+		c = { 48 / 255, 113 / 255, 191 / 255 },
 	},
 	{
 		name = "Death Log",
 		id = "deathlog",
 		view = "Deathlog",
 		onlyfights = true,
-		c = {.66, .25, .25},
+		c = { .66, .25, .25 },
 	},
 	{
 		name = "Parry",
 		id = "pr",
-		c = {.58, .24, .63},
+		c = { .58, .24, .63 },
 	},
 }

@@ -64,9 +64,9 @@ local updateTables = function(set, u, etype, merged, targetName)
 	if merged and u.pets then
 		for petname, v in pairs(u.pets) do
 			local pu = set.unit[petname]
-			if pu[etype] then
-				total = total + pu[etype].total
-				for id, amount in pairs(pu[etype].spell) do
+			if pu[etype] and pu[etype].target and pu[etype].target[targetName] then
+				total = total + pu[etype].target[targetName]
+				for id, amount in pairs(pu[etype].targetSpell[targetName].spells) do
 					local name = format("%s%s", pu.name, id)
 					nameToValue[name] = amount
 					nameToPetName[name] = pu.name
@@ -98,6 +98,7 @@ function view:Update(merged, windowID)
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged, targetName)
 	total = total + updateTables(set, u, etype2, merged, targetName)
+	--print("Update",set, u,total)
 
 	local action = nil
 
@@ -141,13 +142,17 @@ end
 
 function view:Report(merged, num_lines, windowID)
 	local set = addon:GetSet(addon.nav[windowID].set)
-	local u = set.unit[addon.nav[windowID].unit]
+	local u = set.unit[addon.nav[windowID].sourceName]
+	local targetName = addon.nav[windowID].target
 	local etype = addon.types[addon.nav[windowID].type].id
 	local etype2 = addon.types[addon.nav[windowID].type].id2
-
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged)
 	total = total + updateTables(set, u, etype2, merged)
+	local total = updateTables(set, u, etype, merged, targetName)
+	total = total + updateTables(set, u, etype2, merged, targetName)
+	--print("Update",set, u,total,#sorttbl)
+
 	if #sorttbl == 0 then return end
 	if #sorttbl < num_lines then
 		num_lines = #sorttbl

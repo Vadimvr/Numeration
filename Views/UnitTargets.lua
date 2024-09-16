@@ -10,6 +10,7 @@ local backAction = function(f,windowID)
 end
 
 function view:Init(windowID)
+
 	local set = addon:GetSet(addon.nav[windowID].set)
 	if not set then backAction(nil, windowID) return end
 	local u = set.unit[addon.nav[windowID].unit]
@@ -95,7 +96,6 @@ function view:Update(merged,windowID)
 		local petName = nameToPetName[sorttbl[i]]
 		local value = nameToValue[sorttbl[i]]
 		local target = nameToTarget[sorttbl[i]]
-		
 		local line = addon.windows[windowID]:GetLine(i-self.first)
 		line:SetValues(value, maxvalue)
 		if petName then

@@ -1,6 +1,6 @@
 local addon = select(2, ...)
 local view = {}
-addon.views["UnitSpells"] = view
+addon.views["UnitTargetsHealSpell"] = view
 view.first = 1
 
 local spellName = addon.spellName
@@ -8,19 +8,8 @@ local spellIcon = addon.spellIcon
 
 local backAction = function(f, windowID)
 	view.first = 1
-	addon.nav[windowID].view = "Units"
-	addon.nav[windowID].unit = nil
-	addon:RefreshDisplay(nil, windowID)
-end
-
-local detailAction = function(f, windowID)
-	local etype = addon.types[addon.nav[windowID].type].id
-	local etype2 = addon.types[addon.nav[windowID].type].id2
-	if (etype == "hd" and etype2 == "ga") then
-		addon.nav[windowID].view = "UnitTargetsHeal"
-	else
-		addon.nav[windowID].view = "UnitTargets"
-	end
+	addon.nav[windowID].view = "UnitTargetsHeal"
+	addon.nav[windowID].unitTargetsHeal = nil
 	addon:RefreshDisplay(nil, windowID)
 end
 
@@ -55,29 +44,29 @@ local sorter = function(n1, n2)
 	return nameToValue[n1] > nameToValue[n2]
 end
 
-local updateTables = function(set, u, etype, merged)
+local updateTables = function(set, u, etype, merged, targetName)
 	if not etype then return 0 end
 	local total = 0
-	if u[etype] then
-		total = u[etype].total
-		for id, amount in pairs(u[etype].spell) do
+	if u[etype] and u[etype].targetSpell and u[etype].targetSpell[targetName] then
+		for id, amount in pairs(u[etype].targetSpell[targetName].spells) do
 			local name = format("%s%s", u.name, id)
 			nameToValue[name] = amount
 			nameToId[name] = id
 			tinsert(sorttbl, name)
+			total = total + amount;
 		end
 	end
 	if merged and u.pets then
 		for petname, v in pairs(u.pets) do
 			local pu = set.unit[petname]
-			if pu[etype] then
-				total = total + pu[etype].total
-				for id, amount in pairs(pu[etype].spell) do
+			if pu[etype] and pu[etype].targetSpell and pu[etype].targetSpell[targetName] then
+				for id, amount in pairs(pu[etype].targetSpell[targetName].spells) do
 					local name = format("%s%s", pu.name, id)
 					nameToValue[name] = amount
 					nameToPetName[name] = pu.name
 					nameToId[name] = id
 					tinsert(sorttbl, name)
+					total = total + amount;
 				end
 			end
 		end
@@ -99,10 +88,11 @@ function view:Update(merged, windowID)
 	end
 	local etype = addon.types[addon.nav[windowID].type].id
 	local etype2 = addon.types[addon.nav[windowID].type].id2
+	local targetName = addon.nav[windowID].unitTargetsHeal;
 
 	-- compile and sort information table
-	local total = updateTables(set, u, etype, merged)
-	total = total + updateTables(set, u, etype2, merged)
+	local total = updateTables(set, u, etype, merged, targetName)
+	total = total + updateTables(set, u, etype2, merged, targetName)
 
 	local action = nil
 	if addon.nav[windowID].set ~= "total" then
@@ -137,7 +127,7 @@ function view:Update(merged, windowID)
 		line:SetColor(c[1], c[2], c[3])
 		line:SetIcon(icon)
 		line.spellId = id
-		line:SetDetailAction(action)
+		line:SetDetailAction(nil)
 		line:Show()
 	end
 
@@ -152,10 +142,12 @@ function view:Report(merged, num_lines, windowID)
 	local u = set.unit[addon.nav[windowID].unit]
 	local etype = addon.types[addon.nav[windowID].type].id
 	local etype2 = addon.types[addon.nav[windowID].type].id2
+	local targetName = addon.nav[windowID].unitTargetsHeal;
 
 	-- compile and sort information table
-	local total = updateTables(set, u, etype, merged)
-	total = total + updateTables(set, u, etype2, merged)
+	local total = updateTables(set, u, etype, merged, targetName)
+	total = total + updateTables(set, u, etype2, merged, targetName)
+
 	if #sorttbl == 0 then return end
 	if #sorttbl < num_lines then
 		num_lines = #sorttbl
