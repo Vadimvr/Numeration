@@ -142,10 +142,12 @@ function view:Report(merged, num_lines, windowID)
 	local u = set.unit[addon.nav[windowID].unit]
 	local etype = addon.types[addon.nav[windowID].type].id
 	local etype2 = addon.types[addon.nav[windowID].type].id2
+	local targetName = addon.nav[windowID].unitTargetsHeal;
 
 	-- compile and sort information table
-	local total = updateTables(set, u, etype, merged)
-	total = total + updateTables(set, u, etype2, merged)
+	local total = updateTables(set, u, etype, merged, targetName)
+	total = total + updateTables(set, u, etype2, merged, targetName)
+
 	if #sorttbl == 0 then return end
 	if #sorttbl < num_lines then
 		num_lines = #sorttbl
