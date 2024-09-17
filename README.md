@@ -1,4 +1,4 @@
-# Numeration fo wtlk 3.3.5a<br />
+# Numeration fo wotlk 3.3.5a<br />
 Original https://github.com/nekoh/Numeration<br />
 You can create multiple windows.<br />
 Change the number of lines in the window.<br />
