@@ -1,6 +1,6 @@
 local n = select(2, ...)
 
--- window settings
+-- default window settings 
 n.windowsettings = {
 	pos = { "TOPLEFT", 10, -10 },
 	width = 230,
@@ -45,27 +45,27 @@ n.windowsSettings = {
 		linefontsize = 14,
 		linefontcolor = { 1, 1, 1 },
 	},
-	[2] = {
-		pos = { "TOPLEFT", 10, -10 },
-		width = n.windowsettings.width,
-		maxlines = n.windowsettings.maxlines,
-		backgroundalpha = 1,
-		scrollbar = true,
+	-- [2] = {
+	-- pos = { "TOPLEFT", 10, -10 },
+	-- width = n.windowsettings.width,
+	-- maxlines = n.windowsettings.maxlines,
+	-- backgroundalpha = 1,
+	-- scrollbar = true,
 
-		titleheight = 16,
-		titlealpha = 0.9,
-		titlefont = [[Fonts\ARIALN.TTF]],
-		titlefontsize = 13,
-		titlefontcolor = { 1, .82, 0 },
+	-- titleheight = 16,
+	-- titlealpha = 0.9,
+	-- titlefont = [[Fonts\ARIALN.TTF]],
+	-- titlefontsize = 13,
+	-- titlefontcolor = { 1, .82, 0 },
 
-		lineheight = 15,
-		linegap = 1,
-		linealpha = 1,
-		linetexture = [[Interface\Tooltips\UI-Tooltip-Background]],
-		linefont = [[Fonts\ARIALN.TTF]],
-		linefontsize = 14,
-		linefontcolor = { 1, 1, 1 },
-	},
+	-- lineheight = 15,
+	-- linegap = 1,
+	-- linealpha = 1,
+	-- linetexture = [[Interface\Tooltips\UI-Tooltip-Background]],
+	-- linefont = [[Fonts\ARIALN.TTF]],
+	-- linefontsize = 14,
+	-- linefontcolor = { 1, 1, 1 },
+	-- },
 }
 
 
