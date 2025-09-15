@@ -52,11 +52,11 @@ n.windowsSettings = {
 	-- 	backgroundalpha = 1,
 	-- 	scrollbar = true,
 
-	-- 	titleheight = 16,
-	-- 	titlealpha = 0.9,
-	-- 	titlefont = [[Fonts\ARIALN.TTF]],
-	-- 	titlefontsize = 13,
-	-- 	titlefontcolor = { 1, .82, 0 },
+		-- titleheight = 16,
+		-- titlealpha = 0.9,
+		-- titlefont = [[Fonts\ARIALN.TTF]],
+		-- titlefontsize = 13,
+		-- titlefontcolor = { 1, .82, 0 },
 
 	-- 	lineheight = 15,
 	-- 	linegap = 1,
