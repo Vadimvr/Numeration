@@ -57,8 +57,8 @@ n.windowsSettings = {
 	-- titlefont = [[Fonts\ARIALN.TTF]],
 	-- titlefontsize = 13,
 	-- titlefontcolor = { 1, .82, 0 },
-	-- lineheight = 15,
 
+	-- lineheight = 15,
 	-- linegap = 1,
 	-- linealpha = 1,
 	-- linetexture = [[Interface\Tooltips\UI-Tooltip-Background]],
