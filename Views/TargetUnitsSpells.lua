@@ -98,7 +98,6 @@ function view:Update(merged, windowID)
 	-- compile and sort information table
 	local total = updateTables(set, u, etype, merged, targetName)
 	total = total + updateTables(set, u, etype2, merged, targetName)
-	--print("Update",set, u,total)
 
 	local action = nil
 
@@ -151,7 +150,6 @@ function view:Report(merged, num_lines, windowID)
 	total = total + updateTables(set, u, etype2, merged)
 	local total = updateTables(set, u, etype, merged, targetName)
 	total = total + updateTables(set, u, etype2, merged, targetName)
-	--print("Update",set, u,total,#sorttbl)
 
 	if #sorttbl == 0 then return end
 	if #sorttbl < num_lines then

@@ -35,7 +35,6 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
     function window:OnInitialize(windowID)
         s = a.windowsSettings[windowID];
         self.maxlines = s.maxlines
-        print(" self.maxlines = s.maxlines",s.maxlines,self.maxlines,a.windowsSettings[windowID].maxlines)
         self:SetWidth(s.width)
         self:SetHeight(3 + s.titleheight + s.maxlines * (s.lineheight + s.linegap))
 
@@ -57,17 +56,14 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
 
             a:SetOption("x" .. tostring(windowID), xOfs / uis)
             a:SetOption("y" .. tostring(windowID), yOfs / uis)
-            -- print(xOfs / uis,yOfs / uis)
         end)
 
         self:UpdateBackdrop(windowID)
 
         local x, y = a:GetOption("x" .. tostring(windowID)), a:GetOption("y" .. tostring(windowID))
         if not x or not y then
-            print("pos if 67")
             self:SetPoint(unpack(s.pos))
         else
-            print("pos else 69")
             -- positioning code taken from recount
             local s = self:GetEffectiveScale()
             local uis = UIParent:GetScale()
@@ -156,15 +152,7 @@ function a.CreteWindow:CreteWindow(window, name, windowID)
                             { text = "- 2", func = function() a.windows:UpdateLines(windowID, -2) end, notCheckable = true }
                         },
                     },
-                    {
-                        text = "windows",
-                        notCheckable = true,
-                        hasArrow = true,
-                        menuList = {
-                            { text = "+ 1", func = function() a.windows:UpdateLines(windowID, 1) end,  notCheckable = true },
-                            { text = "- 1", func = function() a.windows:UpdateLines(windowID, -1) end, notCheckable = true },
-                        },
-                    }
+
                 },
             },
             { text = "",           notClickable = true },

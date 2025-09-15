@@ -92,8 +92,7 @@ function view:Update(merged,windowID)
 			line:SetRightText("%i (%02.1f%%)", value, value/total*100)
 		end
 		line:SetColor(c[1], c[2], c[3])
-	--	print("Line.target", target)
-		--line.target = target
+
 		line.sourceName = u.name
 		line:SetDetailAction(detailAction)
 		line:Show()
